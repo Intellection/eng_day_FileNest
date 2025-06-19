@@ -1,0 +1,313 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# SnapVault ClamAV Management Script
+# Usage: bin/clamav [command]
+
+require 'optparse'
+
+class ClamAVManager
+  CONTAINER_NAME = 'snapvault_clamav'
+
+  def initialize
+    @options = {}
+    @parser = create_parser
+  end
+
+  def run(args)
+    @parser.parse!(args)
+    command = args.first || 'status'
+
+    case command
+    when 'start'
+      start_clamav
+    when 'stop'
+      stop_clamav
+    when 'restart'
+      restart_clamav
+    when 'status'
+      show_status
+    when 'logs'
+      show_logs
+    when 'test'
+      test_connection
+    when 'clean'
+      cleanup
+    when 'update'
+      update_definitions
+    else
+      puts "Unknown command: #{command}"
+      puts @parser.help
+      exit 1
+    end
+  end
+
+  private
+
+  def create_parser
+    OptionParser.new do |opts|
+      opts.banner = "SnapVault ClamAV Management\n\nUsage: bin/clamav [command] [options]"
+      opts.separator ""
+      opts.separator "Commands:"
+      opts.separator "  start     Start ClamAV container"
+      opts.separator "  stop      Stop ClamAV container"
+      opts.separator "  restart   Restart ClamAV container"
+      opts.separator "  status    Show ClamAV status"
+      opts.separator "  logs      Show ClamAV logs"
+      opts.separator "  test      Test ClamAV connection"
+      opts.separator "  update    Update virus definitions"
+      opts.separator "  clean     Stop and remove ClamAV (complete cleanup)"
+      opts.separator ""
+      opts.separator "Options:"
+
+      opts.on('-f', '--follow', 'Follow logs (for logs command)') do
+        @options[:follow] = true
+      end
+
+      opts.on('-h', '--help', 'Show this help') do
+        puts opts
+        exit
+      end
+    end
+  end
+
+  def start_clamav
+    puts "🦠 Starting ClamAV container..."
+
+    if container_running?
+      puts "✅ ClamAV is already running"
+      return
+    end
+
+    system("docker-compose up -d clamav")
+
+    if $?.success?
+      puts "✅ ClamAV started successfully"
+      puts "⏳ Waiting for ClamAV to be ready (this may take a few minutes)..."
+      wait_for_ready
+    else
+      puts "❌ Failed to start ClamAV"
+      exit 1
+    end
+  end
+
+  def stop_clamav
+    puts "🛑 Stopping ClamAV container..."
+
+    unless container_exists?
+      puts "ℹ️  ClamAV container does not exist"
+      return
+    end
+
+    system("docker-compose stop clamav")
+
+    if $?.success?
+      puts "✅ ClamAV stopped successfully"
+    else
+      puts "❌ Failed to stop ClamAV"
+      exit 1
+    end
+  end
+
+  def restart_clamav
+    puts "🔄 Restarting ClamAV container..."
+    stop_clamav
+    sleep 2
+    start_clamav
+  end
+
+  def show_status
+    puts "📊 ClamAV Status"
+    puts "=" * 40
+
+    if container_running?
+      puts "✅ Container: Running"
+
+      # Check health
+      health = container_health
+      puts "🏥 Health: #{health}"
+
+      # Check port
+      if port_accessible?
+        puts "🌐 Port 3310: Accessible"
+      else
+        puts "⚠️  Port 3310: Not accessible"
+      end
+
+      # Test Rails connection
+      if rails_can_connect?
+        puts "🔗 Rails Connection: OK"
+      else
+        puts "⚠️  Rails Connection: Failed"
+      end
+
+    else
+      puts "❌ Container: Not running"
+    end
+
+    puts ""
+    puts "💡 Commands:"
+    puts "  bin/clamav start    # Start ClamAV"
+    puts "  bin/clamav logs     # View logs"
+    puts "  bin/clamav test     # Test connection"
+  end
+
+  def show_logs
+    unless container_exists?
+      puts "❌ ClamAV container does not exist"
+      exit 1
+    end
+
+    if @options[:follow]
+      puts "📋 Following ClamAV logs (Ctrl+C to exit)..."
+      exec("docker-compose logs -f clamav")
+    else
+      puts "📋 ClamAV logs (last 50 lines):"
+      system("docker-compose logs --tail=50 clamav")
+    end
+  end
+
+  def test_connection
+    puts "🧪 Testing ClamAV connection..."
+
+    unless container_running?
+      puts "❌ ClamAV container is not running"
+      puts "💡 Run: bin/clamav start"
+      exit 1
+    end
+
+    # Test with telnet/nc if available
+    if system("which nc > /dev/null 2>&1")
+      if system("echo 'PING' | nc -w 1 localhost 3310 | grep -q PONG")
+        puts "✅ ClamAV is responding on port 3310"
+      else
+        puts "❌ ClamAV is not responding on port 3310"
+        puts "💡 Try: bin/clamav logs"
+        exit 1
+      end
+    else
+      puts "⚠️  'nc' command not available, skipping port test"
+    end
+
+    # Test from Rails if possible
+    if File.exist?('config/application.rb')
+      puts "🚀 Testing Rails connection..."
+      test_result = `bundle exec rails runner "puts FileProcessing::VirusScanner.instance.service_available?" 2>/dev/null`.strip
+
+      if test_result == "true"
+        puts "✅ Rails can connect to ClamAV"
+
+        # Get version info
+        version = `bundle exec rails runner "puts FileProcessing::VirusScanner.instance.version_info" 2>/dev/null`.strip
+        puts "📝 Version: #{version}" unless version.empty?
+      else
+        puts "❌ Rails cannot connect to ClamAV"
+        puts "💡 Check: bin/clamav logs"
+        exit 1
+      end
+    end
+
+    puts "🎉 All tests passed!"
+  end
+
+  def update_definitions
+    unless container_running?
+      puts "❌ ClamAV container is not running"
+      puts "💡 Run: bin/clamav start"
+      exit 1
+    end
+
+    puts "🔄 Updating virus definitions..."
+    system("docker exec #{CONTAINER_NAME} freshclam")
+
+    if $?.success?
+      puts "✅ Virus definitions updated"
+    else
+      puts "❌ Failed to update virus definitions"
+      exit 1
+    end
+  end
+
+  def cleanup
+    puts "🧹 Cleaning up ClamAV (complete removal)..."
+
+    # Stop container
+    system("docker-compose down")
+
+    # Remove volumes
+    puts "🗑️  Removing volumes..."
+    system("docker volume rm snapvault_clamav_data snapvault_clamav_logs 2>/dev/null")
+
+    # Remove any orphaned containers
+    system("docker container rm #{CONTAINER_NAME} 2>/dev/null")
+
+    puts "✅ ClamAV cleanup complete"
+    puts "💡 All ClamAV data has been removed from your system"
+  end
+
+  def wait_for_ready
+    max_wait = 300 # 5 minutes
+    interval = 10
+    elapsed = 0
+
+    while elapsed < max_wait
+      if container_healthy?
+        puts "✅ ClamAV is ready!"
+        return
+      end
+
+      print "."
+      sleep interval
+      elapsed += interval
+    end
+
+    puts "\n⚠️  ClamAV did not become ready within #{max_wait} seconds"
+    puts "💡 Run: bin/clamav logs"
+  end
+
+  def container_exists?
+    system("docker container inspect #{CONTAINER_NAME} > /dev/null 2>&1")
+  end
+
+  def container_running?
+    result = `docker container inspect #{CONTAINER_NAME} --format='{{.State.Running}}' 2>/dev/null`.strip
+    result == "true"
+  end
+
+  def container_health
+    result = `docker container inspect #{CONTAINER_NAME} --format='{{.State.Health.Status}}' 2>/dev/null`.strip
+    case result
+    when "healthy"
+      "✅ Healthy"
+    when "unhealthy"
+      "❌ Unhealthy"
+    when "starting"
+      "⏳ Starting"
+    else
+      "❓ Unknown"
+    end
+  end
+
+  def container_healthy?
+    result = `docker container inspect #{CONTAINER_NAME} --format='{{.State.Health.Status}}' 2>/dev/null`.strip
+    result == "healthy"
+  end
+
+  def port_accessible?
+    system("nc -z localhost 3310 2>/dev/null") ||
+    system("telnet localhost 3310 </dev/null 2>/dev/null | grep -q Connected")
+  end
+
+  def rails_can_connect?
+    return false unless File.exist?('config/application.rb')
+
+    result = `bundle exec rails runner "puts FileProcessing::VirusScanner.instance.service_available?" 2>/dev/null`.strip
+    result == "true"
+  end
+end
+
+# Run the manager
+if __FILE__ == $0
+  manager = ClamAVManager.new
+  manager.run(ARGV)
+end

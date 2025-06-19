@@ -7,6 +7,11 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore all environment files (except templates).
+/.env
+/.env.*
+!/.env*.erb
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-*
@@ -22,7 +27,7 @@
 !/tmp/pids/
 !/tmp/pids/.keep
 
-# Ignore uploaded files in development.
+# Ignore storage (uploaded files in development and any SQLite databases).
 /storage/*
 !/storage/.keep
 /tmp/storage/*
@@ -46,6 +51,32 @@
 yarn-debug.log*
 .yarn-integrity
 
+# Ignore uploaded files in development
+/public/uploads
+
+# SQLite databases
+*.sqlite3
+*.sqlite3-*
+
+# Database dumps
+*.sql
+
+# Rails cache and temporary files
+/tmp/cache/*
+!/tmp/cache/.keep
+
+# Bootsnap cache
+/tmp/cache/bootsnap*
+
+# Sass cache
+/.sass-cache
+
+# Node modules (if using Node.js/npm)
+/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Ignore byebug command history file.
 .byebug_history
 
@@ -54,6 +85,17 @@ yarn-debug.log*
 
 # Ignore Kamal configuration secrets
 /.kamal/secrets*
+
+# Coverage reports
+/coverage/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
 
 # OS generated files
 .DS_Store
@@ -64,30 +106,108 @@ yarn-debug.log*
 ehthumbs.db
 Thumbs.db
 
+# Windows
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+*~
+
 # Editor files
 *.swp
 *.swo
 *~
 
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Coverage reports
-coverage/
-
-# RubyMine
-.idea/
+# Emacs
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
 
 # VS Code
 .vscode/
+*.code-workspace
+
+# JetBrains IDEs / RubyMine
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
 
 # RuboCop cache
 .rubocop-*
 
 # Simplecov
 coverage/
+
+# Docker volumes (if using)
+/postgres-data
+/redis-data
+
+# Test artifacts
+/test/tmp/
+/spec/tmp/
+
+# Security files (never commit these!)
+/config/credentials/*.key
+/config/application.yml
+/config/database.yml.example
+
+# Local configuration overrides
+/config/settings.local.yml
+/config/settings/*.local.yml
+/config/environments/*.local.yml
+
+# RVM / rbenv
+.rvmrc
+.ruby-version
+.ruby-gemset
+
+# Bundler
+vendor/bundle/
+.bundle/
+
+# Capistrano
+/config/deploy/*
+/log/capistrano.log
+
+# Docker
+.dockerignore
+
+# Active Storage uploads
+/storage/blobs/
+/storage/variant_cache/
+
+# Virus scanner test files
+eicar.txt
+*.eicar
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Log files
+*.log
+
+# PID files
+*.pid
+
+# Lock files
+Gemfile.lock.orig
+package-lock.json.orig
+
+# Backup files
+*.backup
+*.old
 
 # Ignore Redis dump files
 dump.rdb

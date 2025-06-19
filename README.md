@@ -70,34 +70,96 @@ SnapVault is a lightweight, secure file upload and access API designed as your p
 - Ruby 3.3.5
 - PostgreSQL
 - ImageMagick or libvips (for image processing)
+- ClamAV (for virus scanning) or Docker
 
 ### Installation
 
-1. **Clone and setup the application**:
+#### Option 1: Native Rails + Docker ClamAV (Recommended)
+
+1. **Start ClamAV in Docker**:
+```bash
+cd snapvault
+docker-compose up -d clamav
+```
+
+2. **Run Rails natively**:
+```bash
+bundle install
+bin/rails db:create db:migrate
+bin/rails server
+```
+
+This setup provides:
+- Fast native Rails development
+- Isolated ClamAV in Docker (easy to delete)
+- No system pollution from virus scanner
+- ClamAV accessible at `localhost:3310`
+
+#### Option 2: Native ClamAV Installation
+
+1. **Install ClamAV**:
+```bash
+# macOS
+brew install clamav
+brew services start clamav
+
+# Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install clamav clamav-daemon
+sudo systemctl start clamav-daemon
+sudo systemctl enable clamav-daemon
+
+# CentOS/RHEL
+sudo yum install clamav clamav-devel
+sudo systemctl start clamd
+```
+
+2. **Update virus definitions**:
+```bash
+sudo freshclam
+```
+
+3. **Setup the application**:
 ```bash
 cd snapvault
 bundle install
 ```
 
-2. **Database setup**:
+4. **Database setup**:
 ```bash
 bin/rails db:create
 bin/rails db:migrate
 ```
 
-3. **Start the server**:
+5. **Start the server**:
 ```bash
 bin/rails server
 ```
 
+#### Option 3: Development Mode (No Virus Scanning)
+
+For development without virus scanning:
+```bash
+cd snapvault
+bundle install
+bin/rails db:create db:migrate
+SKIP_VIRUS_SCAN=true bin/rails server
+```
+
 The application will be available at `http://localhost:3000`
 
-### Quick Start with Docker
+### Quick Start Options
 
 ```bash
-# Build and run with Docker
-docker build -t snapvault .
-docker run -p 3000:3000 snapvault
+# Method 1: Native Rails + Docker ClamAV (Recommended)
+docker-compose up -d clamav  # Start ClamAV only
+bin/rails server             # Start Rails natively
+
+# Method 2: Development without virus scanning
+SKIP_VIRUS_SCAN=true bin/rails server
+
+# Method 3: Complete Docker setup (if needed)
+docker-compose up -d  # Would start both if app service existed
 ```
 
 ## 🏃‍♂️ Usage
@@ -163,6 +225,44 @@ bin/rubocop -A
 bin/brakeman
 ```
 
+### Virus Scanning Configuration
+
+#### Environment Variables
+```bash
+# ClamAV connection (Docker setup)
+export CLAMAV_HOST=localhost      # Docker exposes to localhost
+export CLAMAV_PORT=3310          # Default ClamAV port
+
+# Alternative: Native ClamAV socket
+export CLAMAV_SOCKET_PATH=/var/run/clamav/clamd.ctl
+
+# Development: Skip virus scanning for faster development
+export SKIP_VIRUS_SCAN=true
+
+# Production: Require virus scanning (recommended)
+export REQUIRE_VIRUS_SCAN=true
+
+# Fail-open policy: Allow files when scanner is unavailable (not recommended for production)
+export VIRUS_SCAN_FAIL_OPEN=true
+```
+
+#### Testing Virus Scanner
+```bash
+# Start ClamAV in Docker
+docker-compose up -d clamav
+
+# Wait for it to be ready (check logs)
+docker-compose logs -f clamav
+
+# Test from Rails
+bin/rails console
+> FileProcessing::VirusScanner.instance.service_available?
+> FileProcessing::VirusScanner.instance.version_info
+
+# Cleanup when done
+docker-compose down -v
+```
+
 ### Console Access
 ```bash
 bin/rails console
@@ -203,15 +303,18 @@ snapvault/
 - File ownership verification
 
 ### File Security
+- **Virus scanning** with ClamAV integration
 - MIME type validation
 - File size limits (2MB max)
 - Allowed file type restrictions
 - Secure file storage with Active Storage
+- Real-time threat detection
 
 ### API Security
 - Rate limiting ready
 - Input validation and sanitization
 - Error handling without information leakage
+- Virus scan results in API responses
 
 ## 📊 File Type Support
 
@@ -232,6 +335,9 @@ snapvault/
 export RAILS_ENV=production
 export SECRET_KEY_BASE=your_secret_key
 export DATABASE_URL=postgresql://user:pass@host:port/dbname
+export CLAMAV_HOST=your_clamav_host
+export CLAMAV_PORT=3310
+export REQUIRE_VIRUS_SCAN=true
 ```
 
 2. **Database Setup**:
@@ -256,14 +362,20 @@ SnapVault is ready for deployment on:
 ### Docker Deployment
 
 ```bash
-# Build production image
-docker build -t snapvault:latest .
+# Method 1: ClamAV in Docker, Rails native
+docker-compose up -d clamav
+RAILS_ENV=production bin/rails server
 
-# Run with environment variables
+# Method 2: ClamAV in Docker, Rails in container (custom setup)
+docker build -t snapvault:latest .
+docker-compose up -d clamav
 docker run -d -p 3000:3000 \
   -e RAILS_ENV=production \
   -e SECRET_KEY_BASE=your_secret \
   -e DATABASE_URL=your_db_url \
+  -e CLAMAV_HOST=localhost \
+  -e CLAMAV_PORT=3310 \
+  --network host \
   snapvault:latest
 ```
 
@@ -280,6 +392,8 @@ docker run -d -p 3000:3000 \
 - [ ] **API Rate Limiting**: Prevent abuse with rate limiting
 - [ ] **File Encryption**: End-to-end encryption for sensitive files
 - [ ] **Audit Logs**: Track file access and modifications
+- [ ] **Advanced Virus Detection**: Multi-engine scanning, custom YARA rules
+- [ ] **Quarantine System**: Isolate and manage detected threats
 
 ### Scalability Improvements
 - [ ] **Cloud Storage**: S3, Google Cloud, Azure integration
