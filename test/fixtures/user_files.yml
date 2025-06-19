@@ -1,15 +1,36 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  user: one
-  filename: MyString
-  content_type: MyString
-  file_size: 1
-  uploaded_at: 2025-06-19 10:08:45
+image_file:
+  user: john
+  filename: profile_picture.jpg
+  content_type: image/jpeg
+  file_size: 1048576 # 1MB
+  uploaded_at: <%= 2.days.ago %>
 
-two:
-  user: two
-  filename: MyString
-  content_type: MyString
-  file_size: 1
-  uploaded_at: 2025-06-19 10:08:45
+text_file:
+  user: john
+  filename: notes.txt
+  content_type: text/plain
+  file_size: 2048 # 2KB
+  uploaded_at: <%= 1.day.ago %>
+
+csv_file:
+  user: jane
+  filename: data_export.csv
+  content_type: text/csv
+  file_size: 4096 # 4KB
+  uploaded_at: <%= 3.hours.ago %>
+
+markdown_file:
+  user: jane
+  filename: readme.md
+  content_type: text/markdown
+  file_size: 1024 # 1KB
+  uploaded_at: <%= 1.hour.ago %>
+
+large_image:
+  user: admin
+  filename: banner.png
+  content_type: image/png
+  file_size: 2097152 # 2MB (at the limit)
+  uploaded_at: <%= Time.current %>
