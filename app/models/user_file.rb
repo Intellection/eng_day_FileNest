@@ -2,7 +2,7 @@ class UserFile < ApplicationRecord
   belongs_to :user
   has_one_attached :file
 
-  validates :filename, presence: true
+  validates :filename, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 255 }
   validates :content_type, presence: true
   validates :file_size, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 2.megabytes }
   validates :uploaded_at, presence: true

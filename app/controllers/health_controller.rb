@@ -7,7 +7,7 @@ class HealthController < ApplicationController
       status: "ok",
       timestamp: Time.current.iso8601,
       version: "1.0.0",
-      service: "SnapVault",
+      service: "FileNest",
       uptime: uptime_in_seconds,
       database: database_status,
       storage: storage_status
@@ -16,7 +16,7 @@ class HealthController < ApplicationController
     render json: {
       status: "error",
       timestamp: Time.current.iso8601,
-      service: "SnapVault",
+      service: "FileNest",
       error: e.message
     }, status: :internal_server_error
   end

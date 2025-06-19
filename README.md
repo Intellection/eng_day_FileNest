@@ -1,12 +1,12 @@
-# SnapVault - Your Personal File Cache 🗄️
+# FileNest - Your Personal File Cache 🗄️
 
 [![Ruby](https://img.shields.io/badge/ruby-3.3.5-red.svg)](https://www.ruby-lang.org/)
 [![Rails](https://img.shields.io/badge/rails-8.0.2-red.svg)](https://rubyonrails.org/)
 [![PostgreSQL](https://img.shields.io/badge/postgresql-latest-blue.svg)](https://www.postgresql.org/)
 
-## 🧠 Welcome to SnapVault
+## 🧠 Welcome to FileNest
 
-SnapVault is a lightweight, secure file upload and access API designed as your personal "vault" for screenshots, quick notes, and files. Think of it as a private, temporary cache where you can store and access your files securely - but only your own.
+FileNest is a lightweight, secure file upload and access API designed as your personal "nest" for screenshots, quick notes, and files. Think of it as a private, temporary cache where you can store and access your files securely - but only your own.
 
 ## 🎯 Key Features
 
@@ -257,14 +257,14 @@ SnapVault is ready for deployment on:
 
 ```bash
 # Build production image
-docker build -t snapvault:latest .
+docker build -t filenest:latest .
 
 # Run with environment variables
 docker run -d -p 3000:3000 \
   -e RAILS_ENV=production \
   -e SECRET_KEY_BASE=your_secret \
   -e DATABASE_URL=your_db_url \
-  snapvault:latest
+  filenest:latest
 ```
 
 ## 🔮 Future Enhancements
@@ -316,13 +316,13 @@ docker run -d -p 3000:3000 \
 
 ## 📄 License
 
-SnapVault is open source and available under the [MIT License](LICENSE).
+FileNest is open source and available under the [MIT License](LICENSE).
 
 ## 🆘 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/snapvault/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/snapvault/discussions)
-- **Email**: support@snapvault.dev
+- **Issues**: [GitHub Issues](https://github.com/yourusername/filenest/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/filenest/discussions)
+- **Email**: support@filenest.dev
 
 ## 🙏 Acknowledgments
 
@@ -336,4 +336,4 @@ SnapVault is open source and available under the [MIT License](LICENSE).
 
 **Built with ❤️ for developers who need a simple, secure file cache.**
 
-*SnapVault - Keep your files close, keep them secure.*
+*FileNest - Keep your files close, keep them secure.*

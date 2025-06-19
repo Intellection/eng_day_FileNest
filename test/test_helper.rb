@@ -8,7 +8,7 @@ module ActiveSupport
     parallelize(workers: :number_of_processors)
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
+    # fixtures :all  # Disabled to avoid conflicts with manual test data creation
 
     # Add more helper methods to be used by all tests here...
   end

@@ -22,7 +22,7 @@ module ExceptionHandler
     rescue_from ExceptionHandler::InvalidToken, with: :four_twenty_two
     rescue_from ExceptionHandler::ExpiredSignature, with: :four_ninety_eight
     rescue_from ExceptionHandler::DecodeError, with: :four_oh_one
-    rescue_from ExceptionHandler::UnauthorizedError, with: :four_oh_one
+    rescue_from ExceptionHandler::UnauthorizedError, with: :four_oh_three
 
     rescue_from ActiveRecord::RecordNotFound do |e|
       json_response({ message: e.message }, :not_found)
@@ -49,6 +49,11 @@ module ExceptionHandler
   # JSON response with message; Status code 498 - Invalid token
   def four_ninety_eight(e)
     json_response({ message: e.message }, :invalid_token)
+  end
+
+  # JSON response with message; Status code 403 - Forbidden
+  def four_oh_three(e)
+    json_response({ message: e.message }, :forbidden)
   end
 
   def json_response(object, status = :ok)

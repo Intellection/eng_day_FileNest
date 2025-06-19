@@ -3,103 +3,238 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SnapVault - Your Personal File Cache</title>
+        <title>FileNest - Your Personal File Cache</title>
+        <link rel="icon" href="/FileNest_Logo.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            rel="icon"
-            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗄️</text></svg>"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
         />
         <style>
+            :root {
+                --primary-500: #0088ff;
+                --primary-600: #0070f0;
+                --secondary-500: #d946ef;
+                --secondary-600: #c026d3;
+                --success-500: #22c55e;
+                --error-500: #ef4444;
+                --gray-50: #f8fafc;
+                --gray-100: #f1f5f9;
+                --gray-200: #e2e8f0;
+                --gray-500: #64748b;
+                --gray-600: #475569;
+                --gray-700: #334155;
+                --gray-800: #1e293b;
+                --gray-900: #0f172a;
+                --white: #ffffff;
+                --radius: 0.5rem;
+                --radius-lg: 1rem;
+                --radius-xl: 1.5rem;
+                --radius-2xl: 2rem;
+                --shadow:
+                    0 1px 3px 0 rgb(0 0 0 / 0.1),
+                    0 1px 2px -1px rgb(0 0 0 / 0.1);
+                --shadow-lg:
+                    0 10px 15px -3px rgb(0 0 0 / 0.1),
+                    0 4px 6px -4px rgb(0 0 0 / 0.1);
+                --shadow-xl:
+                    0 20px 25px -5px rgb(0 0 0 / 0.1),
+                    0 8px 10px -6px rgb(0 0 0 / 0.1);
+                --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            }
+
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
             }
 
-            :root {
-                --primary-color: #667eea;
-                --primary-dark: #5a67d8;
-                --secondary-color: #764ba2;
-                --success-color: #48bb78;
-                --error-color: #f56565;
-                --warning-color: #ed8936;
-                --info-color: #4299e1;
-                --gray-50: #f7fafc;
-                --gray-100: #edf2f7;
-                --gray-200: #e2e8f0;
-                --gray-300: #cbd5e0;
-                --gray-400: #a0aec0;
-                --gray-500: #718096;
-                --gray-600: #4a5568;
-                --gray-700: #2d3748;
-                --gray-800: #1a202c;
-                --gray-900: #171923;
-                --white: #ffffff;
-                --border-radius: 8px;
-                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-                --shadow:
-                    0 1px 3px 0 rgba(0, 0, 0, 0.1),
-                    0 1px 2px 0 rgba(0, 0, 0, 0.06);
-                --shadow-md:
-                    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                --shadow-lg:
-                    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-                --shadow-xl:
-                    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-                    0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            }
-
             body {
                 font-family:
-                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                    "Helvetica Neue", Arial, sans-serif;
+                    "Inter",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    sans-serif;
                 background: linear-gradient(
                     135deg,
-                    var(--primary-color) 0%,
-                    var(--secondary-color) 100%
+                    var(--primary-500) 0%,
+                    var(--secondary-600) 100%
                 );
                 min-height: 100vh;
-                color: var(--gray-800);
-                line-height: 1.6;
+                color: var(--gray-900);
+                overflow-x: hidden;
+            }
+
+            .bg-animation {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                overflow: hidden;
+            }
+
+            .floating-shapes {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+
+            .shape {
+                position: absolute;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 50%;
+                animation: float 6s ease-in-out infinite;
+                backdrop-filter: blur(10px);
+            }
+
+            .shape:nth-child(1) {
+                width: 80px;
+                height: 80px;
+                top: 20%;
+                left: 20%;
+                animation-delay: 0s;
+            }
+
+            .shape:nth-child(2) {
+                width: 120px;
+                height: 120px;
+                top: 60%;
+                left: 80%;
+                animation-delay: 2s;
+            }
+
+            .shape:nth-child(3) {
+                width: 60px;
+                height: 60px;
+                top: 80%;
+                left: 10%;
+                animation-delay: 4s;
+            }
+
+            .shape:nth-child(4) {
+                width: 100px;
+                height: 100px;
+                top: 10%;
+                left: 70%;
+                animation-delay: 1s;
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0px) rotate(0deg);
+                    opacity: 0.7;
+                }
+                50% {
+                    transform: translateY(-20px) rotate(180deg);
+                    opacity: 1;
+                }
             }
 
             .container {
-                max-width: 1200px;
+                max-width: 1400px;
                 margin: 0 auto;
-                padding: 1rem;
+                padding: 0 1rem;
+                position: relative;
+                z-index: 1;
             }
 
             .header {
                 text-align: center;
                 color: var(--white);
-                margin-bottom: 2rem;
-                padding: 2rem 0;
+                padding: 2rem 0 3rem;
+                animation: slideDown 0.8s ease-out;
+            }
+
+            .logo-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                animation: logoGlow 2s ease-in-out infinite alternate;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
+                border-radius: var(--radius-xl);
+                box-shadow: var(--shadow-2xl);
+                transition: transform 0.3s ease;
+            }
+
+            .logo:hover {
+                transform: scale(1.1) rotate(5deg);
             }
 
             .header h1 {
-                font-size: 3.5rem;
-                margin-bottom: 0.5rem;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-                font-weight: 700;
+                font-size: clamp(2.5rem, 5vw, 4rem);
+                font-weight: 800;
+                margin: 0;
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                background: linear-gradient(45deg, var(--white), #e0efff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
             }
 
-            .header p {
-                font-size: 1.25rem;
+            .header .subtitle {
+                font-size: clamp(1rem, 2.5vw, 1.5rem);
                 opacity: 0.95;
+                margin-top: 0.5rem;
+                font-weight: 400;
                 max-width: 600px;
-                margin: 0 auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            @keyframes logoGlow {
+                0% {
+                    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+                }
+                100% {
+                    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+                }
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             .main-content {
                 background: var(--white);
-                border-radius: 20px;
-                box-shadow: var(--shadow-xl);
+                border-radius: var(--radius-2xl);
+                box-shadow: var(--shadow-2xl);
                 overflow: hidden;
-                backdrop-filter: blur(10px);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                animation: slideUp 0.8s ease-out 0.2s both;
+                margin-bottom: 2rem;
             }
 
-            /* Auth Section */
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
             .auth-section {
                 padding: 3rem;
                 background: linear-gradient(
@@ -114,45 +249,76 @@
                 justify-content: center;
                 margin-bottom: 2rem;
                 background: var(--gray-100);
-                border-radius: var(--border-radius);
+                border-radius: var(--radius-lg);
                 padding: 0.25rem;
+                position: relative;
+            }
+
+            .tab-indicator {
+                position: absolute;
+                top: 0.25rem;
+                bottom: 0.25rem;
+                background: var(--white);
+                border-radius: var(--radius);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: var(--shadow);
+                z-index: 1;
+                width: calc(50% - 0.25rem);
+                left: 0.25rem;
+            }
+
+            .tab-indicator.register {
+                left: calc(50% + 0.125rem);
             }
 
             .auth-tab {
                 flex: 1;
                 max-width: 200px;
-                padding: 0.75rem 1.5rem;
+                padding: 0.875rem 1.5rem;
                 background: transparent;
                 border: none;
-                border-radius: var(--border-radius);
+                border-radius: var(--radius);
                 cursor: pointer;
                 font-weight: 600;
+                font-size: 0.875rem;
                 transition: all 0.3s ease;
                 color: var(--gray-600);
+                position: relative;
+                z-index: 2;
             }
 
             .auth-tab.active {
-                background: var(--white);
-                color: var(--primary-color);
-                box-shadow: var(--shadow-sm);
+                color: var(--primary-600);
             }
 
             .auth-form {
                 max-width: 400px;
                 margin: 0 auto;
                 display: none;
+                animation: fadeIn 0.5s ease-out;
             }
 
             .auth-form.active {
                 display: block;
             }
 
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
             .auth-form h2 {
                 text-align: center;
                 margin-bottom: 2rem;
-                color: var(--gray-800);
-                font-size: 1.5rem;
-                font-weight: 600;
+                color: var(--gray-900);
+                font-size: 1.75rem;
+                font-weight: 700;
             }
 
             .form-group {
@@ -165,56 +331,73 @@
                 font-weight: 600;
                 color: var(--gray-700);
                 font-size: 0.875rem;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
             }
 
             .form-group input {
                 width: 100%;
-                padding: 0.875rem 1rem;
+                padding: 1rem;
                 border: 2px solid var(--gray-200);
-                border-radius: var(--border-radius);
+                border-radius: var(--radius-lg);
                 font-size: 1rem;
                 transition: all 0.3s ease;
                 background: var(--white);
+                font-family: inherit;
             }
 
             .form-group input:focus {
                 outline: none;
-                border-color: var(--primary-color);
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            }
-
-            .form-group input:invalid {
-                border-color: var(--error-color);
+                border-color: var(--primary-500);
+                box-shadow: 0 0 0 3px rgba(0, 136, 255, 0.1);
+                transform: translateY(-2px);
             }
 
             .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
                 background: linear-gradient(
                     135deg,
-                    var(--primary-color) 0%,
-                    var(--primary-dark) 100%
+                    var(--primary-500),
+                    var(--primary-600)
                 );
                 color: var(--white);
                 border: none;
-                padding: 0.875rem 1.5rem;
-                border-radius: var(--border-radius);
+                padding: 1rem 2rem;
+                border-radius: var(--radius-lg);
                 cursor: pointer;
                 font-size: 1rem;
                 font-weight: 600;
-                transition: all 0.3s ease;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 width: 100%;
                 position: relative;
                 overflow: hidden;
+                font-family: inherit;
+            }
+
+            .btn::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent
+                );
+                transition: left 0.5s;
+            }
+
+            .btn:hover::before {
+                left: 100%;
             }
 
             .btn:hover:not(:disabled) {
-                transform: translateY(-2px);
-                box-shadow: var(--shadow-lg);
-            }
-
-            .btn:active {
-                transform: translateY(0);
+                transform: translateY(-3px);
+                box-shadow: var(--shadow-xl);
             }
 
             .btn:disabled {
@@ -224,27 +407,18 @@
             }
 
             .btn-secondary {
-                background: var(--gray-600);
-            }
-
-            .btn-secondary:hover:not(:disabled) {
-                background: var(--gray-700);
-            }
-
-            .btn-danger {
-                background: var(--error-color);
-            }
-
-            .btn-danger:hover:not(:disabled) {
-                background: #e53e3e;
+                background: linear-gradient(
+                    135deg,
+                    var(--gray-600),
+                    var(--gray-700)
+                );
             }
 
             .btn-small {
-                padding: 0.5rem 1rem;
+                padding: 0.75rem 1.5rem;
                 font-size: 0.875rem;
             }
 
-            /* App Section */
             .app-section {
                 display: none;
                 padding: 2rem;
@@ -257,106 +431,90 @@
             .user-info {
                 background: linear-gradient(
                     135deg,
-                    var(--success-color),
-                    #38a169
+                    var(--success-500),
+                    #16a34a
                 );
                 color: var(--white);
-                padding: 1.5rem;
-                border-radius: 12px;
+                padding: 2rem;
+                border-radius: var(--radius-xl);
                 margin-bottom: 2rem;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                box-shadow: var(--shadow-md);
+                box-shadow: var(--shadow-lg);
             }
 
-            .user-details h3 {
-                font-size: 1.25rem;
-                margin-bottom: 0.25rem;
-            }
-
-            .user-details p {
-                opacity: 0.9;
-                font-size: 0.875rem;
-            }
-
-            /* Upload Section */
             .upload-section {
-                background: var(--gray-50);
+                background: linear-gradient(135deg, #f0f7ff, #fdf4ff);
                 padding: 2rem;
-                border-radius: 12px;
+                border-radius: var(--radius-xl);
                 margin-bottom: 2rem;
                 text-align: center;
-            }
-
-            .upload-section h2 {
-                margin-bottom: 0.5rem;
-                color: var(--gray-800);
-            }
-
-            .upload-section p {
-                color: var(--gray-600);
-                margin-bottom: 1.5rem;
+                border: 1px solid #e0efff;
             }
 
             .upload-area {
                 border: 3px dashed var(--gray-300);
-                border-radius: 12px;
+                border-radius: var(--radius-xl);
                 padding: 3rem 2rem;
-                margin: 1.5rem 0;
+                margin: 2rem 0;
                 transition: all 0.3s ease;
                 cursor: pointer;
                 background: var(--white);
-                position: relative;
             }
 
             .upload-area:hover {
-                border-color: var(--primary-color);
-                background: #f0f8ff;
+                border-color: var(--primary-500);
+                transform: translateY(-5px);
+                box-shadow: var(--shadow-xl);
             }
 
             .upload-area.dragover {
-                border-color: var(--primary-color);
-                background: #f0f8ff;
+                border-color: var(--primary-500);
+                background: #f0f7ff;
                 transform: scale(1.02);
             }
 
             .upload-icon {
-                font-size: 3rem;
+                font-size: 4rem;
                 margin-bottom: 1rem;
-                color: var(--gray-400);
+                color: var(--primary-500);
+                animation: bounce 2s infinite;
             }
 
-            .upload-text {
-                font-size: 1.125rem;
-                color: var(--gray-600);
-                margin-bottom: 1rem;
+            @keyframes bounce {
+                0%,
+                20%,
+                50%,
+                80%,
+                100% {
+                    transform: translateY(0);
+                }
+                40% {
+                    transform: translateY(-10px);
+                }
+                60% {
+                    transform: translateY(-5px);
+                }
             }
 
-            .upload-subtext {
-                font-size: 0.875rem;
-                color: var(--gray-500);
-                margin-bottom: 1.5rem;
-            }
-
-            .file-input {
-                display: none;
-            }
-
-            /* Stats Section */
             .stats {
-                background: linear-gradient(135deg, var(--info-color), #3182ce);
+                background: linear-gradient(
+                    135deg,
+                    var(--primary-600),
+                    var(--secondary-600)
+                );
                 color: var(--white);
-                padding: 1.5rem;
-                border-radius: 12px;
+                padding: 2rem;
+                border-radius: var(--radius-xl);
                 margin-bottom: 2rem;
-                box-shadow: var(--shadow-md);
+                box-shadow: var(--shadow-lg);
             }
 
             .stats-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-                gap: 1.5rem;
+                gap: 2rem;
             }
 
             .stat-item {
@@ -364,112 +522,39 @@
             }
 
             .stat-value {
-                font-size: 2rem;
-                font-weight: 700;
+                font-size: 2.5rem;
+                font-weight: 800;
                 line-height: 1;
-                margin-bottom: 0.25rem;
-            }
-
-            .stat-label {
-                font-size: 0.875rem;
-                opacity: 0.9;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-
-            /* Files Section */
-            .files-section h2 {
-                margin-bottom: 1.5rem;
-                color: var(--gray-800);
-                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
             }
 
             .files-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
                 gap: 1.5rem;
             }
 
             .file-card {
                 background: var(--white);
                 border: 1px solid var(--gray-200);
-                border-radius: 12px;
+                border-radius: var(--radius-xl);
                 padding: 1.5rem;
                 box-shadow: var(--shadow);
                 transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
             }
 
             .file-card:hover {
-                transform: translateY(-4px);
-                box-shadow: var(--shadow-lg);
-                border-color: var(--primary-color);
+                transform: translateY(-8px);
+                box-shadow: var(--shadow-xl);
             }
 
-            .file-info {
-                display: flex;
-                align-items: flex-start;
-                margin-bottom: 1rem;
-            }
-
-            .file-icon {
-                width: 48px;
-                height: 48px;
-                background: linear-gradient(
-                    135deg,
-                    var(--primary-color),
-                    var(--primary-dark)
-                );
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: var(--white);
-                font-size: 1.5rem;
-                margin-right: 1rem;
-                flex-shrink: 0;
-            }
-
-            .file-details {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .file-details h3 {
-                margin: 0 0 0.5rem 0;
-                font-size: 1rem;
-                font-weight: 600;
-                color: var(--gray-800);
-                word-break: break-all;
-                line-height: 1.4;
-            }
-
-            .file-meta {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.75rem;
-                font-size: 0.75rem;
+            .empty-state {
+                text-align: center;
+                padding: 4rem 2rem;
                 color: var(--gray-500);
+                grid-column: 1 / -1;
             }
 
-            .file-meta span {
-                background: var(--gray-100);
-                padding: 0.25rem 0.5rem;
-                border-radius: 4px;
-                font-weight: 500;
-            }
-
-            .file-actions {
-                display: flex;
-                gap: 0.5rem;
-            }
-
-            .file-actions .btn {
-                flex: 1;
-            }
-
-            /* Alerts */
             .alerts-container {
                 position: fixed;
                 top: 20px;
@@ -479,45 +564,17 @@
             }
 
             .alert {
-                padding: 1rem 1.25rem;
-                border-radius: var(--border-radius);
-                margin-bottom: 0.75rem;
+                padding: 1rem 1.5rem;
+                border-radius: var(--radius-lg);
+                margin-bottom: 1rem;
                 font-weight: 500;
-                box-shadow: var(--shadow-lg);
-                animation: slideIn 0.3s ease;
+                box-shadow: var(--shadow-xl);
+                animation: slideInRight 0.4s ease;
                 position: relative;
                 padding-right: 3rem;
             }
 
-            .alert-success {
-                background: #f0fff4;
-                color: #22543d;
-                border-left: 4px solid var(--success-color);
-            }
-
-            .alert-error {
-                background: #fff5f5;
-                color: #742a2a;
-                border-left: 4px solid var(--error-color);
-            }
-
-            .alert-close {
-                position: absolute;
-                top: 0.75rem;
-                right: 1rem;
-                background: none;
-                border: none;
-                font-size: 1.25rem;
-                cursor: pointer;
-                color: inherit;
-                opacity: 0.5;
-            }
-
-            .alert-close:hover {
-                opacity: 1;
-            }
-
-            @keyframes slideIn {
+            @keyframes slideInRight {
                 from {
                     transform: translateX(100%);
                     opacity: 0;
@@ -528,165 +585,93 @@
                 }
             }
 
-            /* Loading */
-            .loading {
-                text-align: center;
-                padding: 3rem;
-                color: var(--gray-500);
+            .alert-success {
+                background: linear-gradient(
+                    135deg,
+                    #f0fdf4,
+                    rgba(34, 197, 94, 0.1)
+                );
+                color: #16a34a;
+                border-left: 4px solid var(--success-500);
             }
 
-            .spinner {
-                display: inline-block;
-                width: 40px;
-                height: 40px;
-                border: 4px solid var(--gray-200);
-                border-top: 4px solid var(--primary-color);
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                margin-bottom: 1rem;
+            .alert-error {
+                background: linear-gradient(
+                    135deg,
+                    #fef2f2,
+                    rgba(239, 68, 68, 0.1)
+                );
+                color: #dc2626;
+                border-left: 4px solid var(--error-500);
             }
 
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
+            .alert-close {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: none;
+                border: none;
+                font-size: 1.25rem;
+                cursor: pointer;
+                color: inherit;
+                opacity: 0.7;
             }
 
             .hidden {
                 display: none !important;
             }
 
-            .empty-state {
-                text-align: center;
-                padding: 3rem;
-                color: var(--gray-500);
-                grid-column: 1 / -1;
-            }
-
-            .empty-state-icon {
-                font-size: 4rem;
-                margin-bottom: 1rem;
-                opacity: 0.5;
-            }
-
-            .empty-state h3 {
-                font-size: 1.25rem;
-                margin-bottom: 0.5rem;
-                color: var(--gray-600);
-            }
-
-            .empty-state p {
-                font-size: 0.875rem;
-            }
-
-            /* Responsive Design */
             @media (max-width: 768px) {
                 .container {
-                    padding: 0.5rem;
+                    padding: 0 0.5rem;
                 }
-
-                .header h1 {
-                    font-size: 2.5rem;
-                }
-
-                .header p {
-                    font-size: 1rem;
-                }
-
                 .auth-section {
                     padding: 2rem 1.5rem;
                 }
-
                 .app-section {
                     padding: 1.5rem;
                 }
-
-                .upload-section {
-                    padding: 1.5rem;
-                }
-
-                .upload-area {
-                    padding: 2rem 1rem;
-                }
-
-                .files-grid {
-                    grid-template-columns: 1fr;
-                }
-
                 .user-info {
                     flex-direction: column;
                     gap: 1rem;
                     text-align: center;
                 }
-
-                .file-actions {
-                    flex-direction: column;
+                .files-grid {
+                    grid-template-columns: 1fr;
                 }
-
-                .stats-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-            }
-
-            @media (max-width: 480px) {
-                .auth-tabs {
-                    flex-direction: column;
-                    gap: 0.25rem;
-                }
-
-                .auth-tab {
-                    max-width: none;
-                }
-
-                .file-info {
-                    flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                }
-
-                .file-icon {
-                    margin-right: 0;
-                    margin-bottom: 1rem;
-                }
-            }
-
-            /* Progress Bar */
-            .progress-bar {
-                width: 100%;
-                height: 4px;
-                background: var(--gray-200);
-                border-radius: 2px;
-                overflow: hidden;
-                margin-top: 1rem;
-            }
-
-            .progress-fill {
-                height: 100%;
-                background: linear-gradient(
-                    90deg,
-                    var(--primary-color),
-                    var(--primary-dark)
-                );
-                border-radius: 2px;
-                transition: width 0.3s ease;
-                width: 0%;
             }
         </style>
     </head>
     <body>
+        <div class="bg-animation">
+            <div class="floating-shapes">
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+        </div>
+
         <div class="container">
             <div class="header">
-                <h1>🗄️ SnapVault</h1>
-                <p>Your Personal File Cache - Secure, Simple, Fast</p>
+                <div class="logo-container">
+                    <img
+                        src="/FileNest_Logo.png"
+                        alt="FileNest Logo"
+                        class="logo"
+                    />
+                    <h1>FileNest</h1>
+                </div>
+                <p class="subtitle">
+                    Your Personal File Cache - Secure, Simple, Fast
+                </p>
             </div>
 
             <div class="main-content">
                 <!-- Authentication Section -->
                 <div class="auth-section" id="authSection">
                     <div class="auth-tabs">
+                        <div class="tab-indicator" id="tabIndicator"></div>
                         <button class="auth-tab active" data-tab="login">
                             Login
                         </button>
@@ -802,13 +787,27 @@
                             Supported formats: JPG, PNG, GIF, SVG, TXT, MD, CSV
                             • Maximum size: 2MB
                         </p>
-
                         <div class="upload-area" id="uploadArea">
                             <div class="upload-icon">📁</div>
-                            <div class="upload-text">
+                            <div
+                                style="
+                                    font-size: 1.25rem;
+                                    color: #334155;
+                                    margin-bottom: 1rem;
+                                    font-weight: 600;
+                                "
+                            >
                                 Drag & drop files here
                             </div>
-                            <div class="upload-subtext">or</div>
+                            <div
+                                style="
+                                    font-size: 1rem;
+                                    color: #64748b;
+                                    margin-bottom: 2rem;
+                                "
+                            >
+                                or
+                            </div>
                             <button
                                 type="button"
                                 class="btn"
@@ -819,59 +818,163 @@
                             <div
                                 class="progress-bar hidden"
                                 id="uploadProgress"
+                                style="
+                                    width: 100%;
+                                    height: 8px;
+                                    background: #e2e8f0;
+                                    border-radius: 0.5rem;
+                                    overflow: hidden;
+                                    margin-top: 1rem;
+                                "
                             >
                                 <div
-                                    class="progress-fill"
                                     id="uploadProgressFill"
+                                    style="
+                                        height: 100%;
+                                        background: linear-gradient(
+                                            90deg,
+                                            #0088ff,
+                                            #d946ef
+                                        );
+                                        transition: width 0.3s ease;
+                                        width: 0%;
+                                    "
                                 ></div>
                             </div>
                         </div>
-
                         <input
                             type="file"
                             id="fileInput"
-                            class="file-input"
+                            style="display: none"
                             multiple
                             accept=".jpg,.jpeg,.png,.gif,.svg,.txt,.md,.csv,image/*,text/*"
                         />
                     </div>
 
                     <!-- Stats Section -->
-                    <div class="stats" id="statsSection">
+                    <div class="stats">
                         <div class="stats-grid">
                             <div class="stat-item">
                                 <div class="stat-value" id="totalFiles">0</div>
-                                <div class="stat-label">Files</div>
+                                <div
+                                    style="
+                                        font-size: 0.875rem;
+                                        opacity: 0.9;
+                                        text-transform: uppercase;
+                                        letter-spacing: 0.05em;
+                                        font-weight: 600;
+                                    "
+                                >
+                                    Files
+                                </div>
                             </div>
                             <div class="stat-item">
                                 <div class="stat-value" id="totalSize">0 B</div>
-                                <div class="stat-label">Storage Used</div>
+                                <div
+                                    style="
+                                        font-size: 0.875rem;
+                                        opacity: 0.9;
+                                        text-transform: uppercase;
+                                        letter-spacing: 0.05em;
+                                        font-weight: 600;
+                                    "
+                                >
+                                    Storage Used
+                                </div>
                             </div>
                             <div class="stat-item">
                                 <div class="stat-value" id="imageFiles">0</div>
-                                <div class="stat-label">Images</div>
+                                <div
+                                    style="
+                                        font-size: 0.875rem;
+                                        opacity: 0.9;
+                                        text-transform: uppercase;
+                                        letter-spacing: 0.05em;
+                                        font-weight: 600;
+                                    "
+                                >
+                                    Images
+                                </div>
                             </div>
                             <div class="stat-item">
                                 <div class="stat-value" id="documentFiles">
                                     0
                                 </div>
-                                <div class="stat-label">Documents</div>
+                                <div
+                                    style="
+                                        font-size: 0.875rem;
+                                        opacity: 0.9;
+                                        text-transform: uppercase;
+                                        letter-spacing: 0.05em;
+                                        font-weight: 600;
+                                    "
+                                >
+                                    Documents
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Files Section -->
                     <div class="files-section">
-                        <h2>Your Files</h2>
-                        <div id="loadingFiles" class="loading hidden">
-                            <div class="spinner"></div>
+                        <h2
+                            style="
+                                margin-bottom: 2rem;
+                                color: #0f172a;
+                                font-size: 2rem;
+                                font-weight: 700;
+                                text-align: center;
+                            "
+                        >
+                            Your Files
+                        </h2>
+                        <div
+                            id="loadingFiles"
+                            class="hidden"
+                            style="
+                                text-align: center;
+                                padding: 4rem 2rem;
+                                color: #64748b;
+                            "
+                        >
+                            <div
+                                style="
+                                    display: inline-block;
+                                    width: 48px;
+                                    height: 48px;
+                                    border: 4px solid #e2e8f0;
+                                    border-top: 4px solid #0088ff;
+                                    border-radius: 50%;
+                                    animation: spin 1s linear infinite;
+                                    margin-bottom: 1rem;
+                                "
+                            ></div>
                             <p>Loading your files...</p>
                         </div>
                         <div class="files-grid" id="filesGrid">
                             <div class="empty-state">
-                                <div class="empty-state-icon">📂</div>
-                                <h3>No files yet</h3>
-                                <p>Upload your first file to get started!</p>
+                                <div
+                                    style="
+                                        font-size: 5rem;
+                                        margin-bottom: 1.5rem;
+                                        opacity: 0.6;
+                                    "
+                                >
+                                    📂
+                                </div>
+                                <h3
+                                    style="
+                                        font-size: 1.5rem;
+                                        margin-bottom: 0.75rem;
+                                        color: #334155;
+                                        font-weight: 600;
+                                    "
+                                >
+                                    No files yet
+                                </h3>
+                                <p style="font-size: 1rem">
+                                    Upload your first file to get started!
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -879,19 +982,20 @@
             </div>
         </div>
 
-        <!-- Alerts Container -->
         <div class="alerts-container" id="alertsContainer"></div>
 
         <script>
-            class SnapVault {
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+
+            class FileNest {
                 constructor() {
-                    this.token = localStorage.getItem("snapvault_token");
-                    this.user = JSON.parse(
-                        localStorage.getItem("snapvault_user") || "null",
-                    );
+                    this.token = localStorage.getItem("filenest_token");
+                    this.user = JSON.parse(localStorage.getItem("filenest_user") || "null");
                     this.baseUrl = window.location.origin;
                     this.uploadInProgress = false;
-
                     this.init();
                 }
 
@@ -901,119 +1005,54 @@
                 }
 
                 bindEvents() {
-                    // Auth tabs
-                    document.querySelectorAll(".auth-tab").forEach((tab) => {
-                        tab.addEventListener("click", (e) =>
-                            this.switchAuthTab(e.target.dataset.tab),
-                        );
+                    document.querySelectorAll(".auth-tab").forEach(tab => {
+                        tab.addEventListener("click", (e) => this.switchAuthTab(e.target.dataset.tab));
                     });
 
-                    // Auth forms
-                    document
-                        .getElementById("loginFormElement")
-                        .addEventListener("submit", (e) => this.handleLogin(e));
-                    document
-                        .getElementById("registerFormElement")
-                        .addEventListener("submit", (e) =>
-                            this.handleRegister(e),
-                        );
-                    document
-                        .getElementById("logoutBtn")
-                        .addEventListener("click", () => this.logout());
+                    document.getElementById("loginFormElement").addEventListener("submit", (e) => this.handleLogin(e));
+                    document.getElementById("registerFormElement").addEventListener("submit", (e) => this.handleRegister(e));
+                    document.getElementById("logoutBtn").addEventListener("click", () => this.logout());
 
-                    // File upload
                     const uploadArea = document.getElementById("uploadArea");
                     const fileInput = document.getElementById("fileInput");
 
-                    uploadArea.addEventListener(
-                        "dragover",
-                        this.handleDragOver.bind(this),
-                    );
-                    uploadArea.addEventListener(
-                        "dragleave",
-                        this.handleDragLeave.bind(this),
-                    );
-                    uploadArea.addEventListener("drop", (e) =>
-                        this.handleDrop(e),
-                    );
-                    fileInput.addEventListener("change", (e) =>
-                        this.handleFileSelect(e),
-                    );
+                    uploadArea.addEventListener("dragover", this.handleDragOver.bind(this));
+                    uploadArea.addEventListener("dragleave", this.handleDragLeave.bind(this));
+                    uploadArea.addEventListener("drop", (e) => this.handleDrop(e));
+                    fileInput.addEventListener("change", (e) => this.handleFileSelect(e));
 
-                    // Password confirmation validation
-                    document
-                        .getElementById("registerPasswordConfirm")
-                        .addEventListener(
-                            "input",
-                            this.validatePasswordMatch.bind(this),
-                        );
+                    document.getElementById("registerPasswordConfirm").addEventListener("input", this.validatePasswordMatch.bind(this));
                 }
 
                 switchAuthTab(tab) {
-                    // Update tab buttons
-                    document
-                        .querySelectorAll(".auth-tab")
-                        .forEach((t) => t.classList.remove("active"));
-                    document
-                        .querySelector(`[data-tab="${tab}"]`)
-                        .classList.add("active");
+                    const indicator = document.getElementById("tabIndicator");
 
-                    // Update forms
-                    document
-                        .querySelectorAll(".auth-form")
-                        .forEach((f) => f.classList.remove("active"));
-                    document
-                        .getElementById(`${tab}Form`)
-                        .classList.add("active");
+                    document.querySelectorAll(".auth-tab").forEach(t => t.classList.remove("active"));
+                    document.querySelector(`[data-tab="${tab}"]`).classList.add("active");
+
+                    if (tab === "register") {
+                        indicator.classList.add("register");
+                    } else {
+                        indicator.classList.remove("register");
+                    }
+
+                    document.querySelectorAll(".auth-form").forEach(f => f.classList.remove("active"));
+                    document.getElementById(`${tab}Form`).classList.add("active");
                 }
 
                 validatePasswordMatch() {
-                    const password =
-                        document.getElementById("registerPassword").value;
-                    const confirmPassword = document.getElementById(
-                        "registerPasswordConfirm",
-                    ).value;
-                    const confirmField = document.getElementById(
-                        "registerPasswordConfirm",
-                    );
+                    const password = document.getElementById("registerPassword").value;
+                    const confirmPassword = document.getElementById("registerPasswordConfirm").value;
+                    const confirmField = document.getElementById("registerPasswordConfirm");
 
                     if (confirmPassword && password !== confirmPassword) {
-                        confirmField.setCustomValidity(
-                            "Passwords do not match",
-                        );
+                        confirmField.setCustomValidity("Passwords do not match");
                     } else {
                         confirmField.setCustomValidity("");
                     }
                 }
 
-                checkAuth() {
-                    if (this.token && this.user) {
-                        this.showApp();
-                        this.loadFiles();
-                    } else {
-                        this.showAuth();
-                    }
-                }
 
-                showAuth() {
-                    document.getElementById("authSection").style.display =
-                        "block";
-                    document
-                        .getElementById("appSection")
-                        .classList.remove("active");
-                }
-
-                showApp() {
-                    document.getElementById("authSection").style.display =
-                        "none";
-                    document
-                        .getElementById("appSection")
-                        .classList.add("active");
-                    document.getElementById("userName").textContent =
-                        this.user.name;
-                    document.getElementById("userEmail").textContent =
-                        this.user.email;
-                }
 
                 async handleLogin(e) {
                     e.preventDefault();
@@ -1022,32 +1061,19 @@
 
                     try {
                         this.setButtonLoading("loginBtn", true);
-                        const response = await this.apiCall(
-                            "/auth/login",
-                            "POST",
-                            data,
-                        );
+                        const response = await this.apiCall("/auth/login", "POST", data);
 
                         if (response.token) {
                             this.setAuth(response.token, response.user);
-                            this.showAlert(
-                                "Welcome back! Login successful.",
-                                "success",
-                            );
+                            this.showAlert("Welcome back! Login successful.", "success");
                             this.showApp();
                             this.loadFiles();
                             e.target.reset();
                         } else {
-                            this.showAlert(
-                                response.message || "Login failed",
-                                "error",
-                            );
+                            this.showAlert(response.message || "Login failed", "error");
                         }
                     } catch (error) {
-                        this.showAlert(
-                            error.message || "Login failed. Please try again.",
-                            "error",
-                        );
+                        this.showAlert(error.message || "Login failed. Please try again.", "error");
                     } finally {
                         this.setButtonLoading("loginBtn", false);
                     }
@@ -1065,332 +1091,308 @@
 
                     try {
                         this.setButtonLoading("registerBtn", true);
-                        const response = await this.apiCall(
-                            "/auth/register",
-                            "POST",
-                            data,
-                        );
+                        const response = await this.apiCall("/auth/register", "POST", data);
 
                         if (response.token) {
                             this.setAuth(response.token, response.user);
-                            this.showAlert(
-                                "Account created successfully! Welcome to SnapVault.",
-                                "success",
-                            );
+                            this.showAlert("Registration successful! Welcome to FileNest.", "success");
                             this.showApp();
                             this.loadFiles();
                             e.target.reset();
                         } else {
-                            this.showAlert(
-                                response.message || "Registration failed",
-                                "error",
-                            );
-                            if (response.errors) {
-                                response.errors.forEach((error) =>
-                                    this.showAlert(error, "error"),
-                                );
-                            }
+                            this.showAlert(response.message || "Registration failed", "error");
                         }
                     } catch (error) {
-                        this.showAlert(
-                            error.message ||
-                                "Registration failed. Please try again.",
-                            "error",
-                        );
+                        this.showAlert(error.message || "Registration failed. Please try again.", "error");
                     } finally {
                         this.setButtonLoading("registerBtn", false);
                     }
                 }
 
-                logout() {
-                    localStorage.removeItem("snapvault_token");
-                    localStorage.removeItem("snapvault_user");
-                    this.token = null;
-                    this.user = null;
-                    this.showAuth();
-                    this.showAlert(
-                        "You have been logged out successfully",
-                        "success",
-                    );
+                validatePasswordMatch() {
+                    const password = document.getElementById("registerPassword").value;
+                    const confirmPassword = document.getElementById("registerPasswordConfirm").value;
+                    const confirmInput = document.getElementById("registerPasswordConfirm");
+
+                    if (confirmPassword && password !== confirmPassword) {
+                        confirmInput.setCustomValidity("Passwords do not match");
+                    } else {
+                        confirmInput.setCustomValidity("");
+                    }
+                }
+
+                checkAuth() {
+                    if (this.token && this.user) {
+                        this.showApp();
+                        this.loadFiles();
+                    } else {
+                        this.showAuth();
+                    }
                 }
 
                 setAuth(token, user) {
                     this.token = token;
                     this.user = user;
-                    localStorage.setItem("snapvault_token", token);
-                    localStorage.setItem(
-                        "snapvault_user",
-                        JSON.stringify(user),
-                    );
+                    localStorage.setItem("filenest_token", token);
+                    localStorage.setItem("filenest_user", JSON.stringify(user));
                 }
 
-                handleDragOver(e) {
-                    e.preventDefault();
-                    e.currentTarget.classList.add("dragover");
+                clearAuth() {
+                    this.token = null;
+                    this.user = null;
+                    localStorage.removeItem("filenest_token");
+                    localStorage.removeItem("filenest_user");
                 }
 
-                handleDragLeave(e) {
-                    e.preventDefault();
-                    e.currentTarget.classList.remove("dragover");
+                logout() {
+                    this.clearAuth();
+                    this.showAuth();
+                    this.showAlert("Logged out successfully", "success");
                 }
 
-                handleDrop(e) {
-                    e.preventDefault();
-                    e.currentTarget.classList.remove("dragover");
-                    const files = Array.from(e.dataTransfer.files);
-                    this.uploadFiles(files);
+                showAuth() {
+                    document.getElementById("authSection").style.display = "block";
+                    document.getElementById("appSection").classList.remove("active");
                 }
 
-                handleFileSelect(e) {
-                    const files = Array.from(e.target.files);
-                    this.uploadFiles(files);
-                    e.target.value = ""; // Reset input
+                showApp() {
+                    document.getElementById("authSection").style.display = "none";
+                    document.getElementById("appSection").classList.add("active");
+                    document.getElementById("userName").textContent = this.user?.name || "User";
+                    document.getElementById("userEmail").textContent = this.user?.email || "";
                 }
 
-                async uploadFiles(files) {
-                    if (this.uploadInProgress) {
-                        this.showAlert(
-                            "Upload already in progress. Please wait.",
-                            "error",
-                        );
-                        return;
-                    }
-
-                    if (files.length === 0) return;
-
-                    this.uploadInProgress = true;
-                    const progressBar =
-                        document.getElementById("uploadProgress");
-                    const progressFill =
-                        document.getElementById("uploadProgressFill");
-
-                    for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-
-                        progressBar.classList.remove("hidden");
-                        const progress = ((i + 1) / files.length) * 100;
-                        progressFill.style.width = `${progress}%`;
-
-                        await this.uploadFile(file);
-                    }
-
-                    progressBar.classList.add("hidden");
-                    this.uploadInProgress = false;
-                    this.loadFiles(); // Refresh the files list
-                }
-
-                async uploadFile(file) {
-                    const formData = new FormData();
-                    formData.append("file", file);
-
-                    try {
-                        const response = await this.apiCall(
-                            "/upload",
-                            "POST",
-                            formData,
-                            true,
-                        );
-                        this.showAlert(
-                            `✅ ${file.name} uploaded successfully!`,
-                            "success",
-                        );
-                    } catch (error) {
-                        this.showAlert(
-                            `❌ Failed to upload ${file.name}: ${error.message}`,
-                            "error",
-                        );
-                    }
-                }
-
-                async loadFiles() {
-                    try {
-                        document
-                            .getElementById("loadingFiles")
-                            .classList.remove("hidden");
-                        const response = await this.apiCall("/files", "GET");
-                        this.displayFiles(response.files || []);
-                        this.updateStats(response);
-                    } catch (error) {
-                        this.showAlert(
-                            "Failed to load files: " + error.message,
-                            "error",
-                        );
-                    } finally {
-                        document
-                            .getElementById("loadingFiles")
-                            .classList.add("hidden");
-                    }
-                }
-
-                displayFiles(files) {
-                    const filesGrid = document.getElementById("filesGrid");
-
-                    if (files.length === 0) {
-                        filesGrid.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📂</div>
-                            <h3>No files yet</h3>
-                            <p>Upload your first file to get started!</p>
-                        </div>
-                    `;
-                        return;
-                    }
-
-                    filesGrid.innerHTML = files
-                        .map(
-                            (file) => `
-                    <div class="file-card">
-                        <div class="file-info">
-                            <div class="file-icon">
-                                ${this.getFileIcon(file.content_type)}
-                            </div>
-                            <div class="file-details">
-                                <h3 title="${this.escapeHtml(file.filename)}">${this.escapeHtml(file.filename)}</h3>
-                                <div class="file-meta">
-                                    <span>${file.human_readable_size}</span>
-                                    <span>${new Date(file.uploaded_at).toLocaleDateString()}</span>
-                                    <span>${file.content_type.split("/")[1].toUpperCase()}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="file-actions">
-                            <button class="btn btn-small btn-secondary" onclick="snapVault.downloadFile(${file.id})">
-                                📥 Download
-                            </button>
-                            <button class="btn btn-small btn-danger" onclick="snapVault.deleteFile(${file.id}, '${this.escapeHtml(file.filename)}')">
-                                🗑️ Delete
-                            </button>
-                        </div>
-                    </div>
-                `,
-                        )
-                        .join("");
-                }
-
-                updateStats(data) {
-                    document.getElementById("totalFiles").textContent =
-                        data.total_count || 0;
-                    document.getElementById("totalSize").textContent =
-                        data.human_readable_total_size || "0 B";
-
-                    // Calculate image and document counts
-                    const files = data.files || [];
-                    const imageCount = files.filter((f) => f.is_image).length;
-                    const documentCount = files.filter((f) => f.is_text).length;
-
-                    document.getElementById("imageFiles").textContent =
-                        imageCount;
-                    document.getElementById("documentFiles").textContent =
-                        documentCount;
-                }
-
-                getFileIcon(contentType) {
-                    if (contentType.startsWith("image/")) {
-                        if (contentType.includes("svg")) return "🎨";
-                        return "🖼️";
-                    }
-                    if (contentType.includes("text/plain")) return "📄";
-                    if (contentType.includes("markdown")) return "📝";
-                    if (contentType.includes("csv")) return "📊";
-                    return "📁";
-                }
-
-                async downloadFile(fileId) {
-                    try {
-                        // Open download in new tab
-                        const downloadUrl = `${this.baseUrl}/files/${fileId}/download`;
-                        const link = document.createElement("a");
-                        link.href = downloadUrl;
-                        link.style.display = "none";
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    } catch (error) {
-                        this.showAlert("Failed to download file", "error");
-                    }
-                }
-
-                async deleteFile(fileId, filename) {
-                    if (
-                        !confirm(
-                            `Are you sure you want to delete "${filename}"?\n\nThis action cannot be undone.`,
-                        )
-                    ) {
-                        return;
-                    }
-
-                    try {
-                        await this.apiCall(`/files/${fileId}`, "DELETE");
-                        this.showAlert(
-                            `🗑️ "${filename}" deleted successfully`,
-                            "success",
-                        );
-                        this.loadFiles();
-                    } catch (error) {
-                        this.showAlert(
-                            "Failed to delete file: " + error.message,
-                            "error",
-                        );
-                    }
-                }
-
-                async apiCall(
-                    endpoint,
-                    method = "GET",
-                    data = null,
-                    isFormData = false,
-                ) {
+                async apiCall(endpoint, method = "GET", data = null, isFormData = false) {
                     const url = `${this.baseUrl}${endpoint}`;
                     const options = {
                         method,
-                        headers: {},
+                        headers: {}
                     };
 
                     if (this.token) {
-                        options.headers["Authorization"] =
-                            `Bearer ${this.token}`;
+                        options.headers["Authorization"] = `Bearer ${this.token}`;
                     }
 
                     if (data) {
                         if (isFormData) {
                             options.body = data;
                         } else {
-                            options.headers["Content-Type"] =
-                                "application/json";
+                            options.headers["Content-Type"] = "application/json";
                             options.body = JSON.stringify(data);
                         }
                     }
 
                     const response = await fetch(url, options);
 
-                    if (!response.ok) {
-                        let errorMessage = `HTTP ${response.status}`;
-                        try {
-                            const errorData = await response.json();
-                            errorMessage = errorData.message || errorMessage;
-                        } catch (e) {
-                            // Use default error message if response is not JSON
-                        }
-                        throw new Error(errorMessage);
+                    if (response.status === 401) {
+                        this.clearAuth();
+                        this.showAuth();
+                        throw new Error("Session expired. Please login again.");
                     }
 
-                    return await response.json();
+                    const responseData = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(responseData.message || `HTTP ${response.status}`);
+                    }
+
+                    return responseData;
+                }
+
+                handleDragOver(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    document.getElementById("uploadArea").classList.add("drag-over");
+                }
+
+                handleDragLeave(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!e.currentTarget.contains(e.relatedTarget)) {
+                        document.getElementById("uploadArea").classList.remove("drag-over");
+                    }
+                }
+
+                async handleDrop(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    document.getElementById("uploadArea").classList.remove("drag-over");
+
+                    const files = Array.from(e.dataTransfer.files);
+                    if (files.length > 0) {
+                        await this.uploadFiles(files);
+                    }
+                }
+
+                async handleFileSelect(e) {
+                    const files = Array.from(e.target.files);
+                    if (files.length > 0) {
+                        await this.uploadFiles(files);
+                        e.target.value = "";
+                    }
+                }
+
+                async uploadFiles(files) {
+                    if (this.uploadInProgress) return;
+
+                    this.uploadInProgress = true;
+                    const uploadProgress = document.getElementById("uploadProgress");
+                    const progressBar = document.getElementById("progressBar");
+                    const progressText = document.getElementById("progressText");
+
+                    uploadProgress.style.display = "block";
+
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        const progress = ((i + 1) / files.length) * 100;
+
+                        progressBar.style.width = `${progress}%`;
+                        progressText.textContent = `Uploading ${file.name}... (${i + 1}/${files.length})`;
+
+                        try {
+                            await this.uploadFile(file);
+                            this.showAlert(`${file.name} uploaded successfully!`, "success");
+                        } catch (error) {
+                            this.showAlert(`Failed to upload ${file.name}: ${error.message}`, "error");
+                        }
+                    }
+
+                    uploadProgress.style.display = "none";
+                    this.uploadInProgress = false;
+                    await this.loadFiles();
+                }
+
+                async uploadFile(file) {
+                    const formData = new FormData();
+                    formData.append("file", file);
+
+                    return await this.apiCall("/upload", "POST", formData, true);
+                }
+
+                async loadFiles() {
+                    try {
+                        const response = await this.apiCall("/files");
+                        this.renderFiles(response.files || []);
+                        this.updateStats(response.stats || {});
+                    } catch (error) {
+                        this.showAlert("Failed to load files: " + error.message, "error");
+                    }
+                }
+
+                renderFiles(files) {
+                    const container = document.getElementById("filesGrid");
+
+                    if (files.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-icon">📁</div>
+                                <h3>No files yet</h3>
+                                <p>Upload your first file to get started</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    container.innerHTML = files.map(file => `
+                        <div class="file-card" data-file-id="${file.id}">
+                            <div class="file-icon">
+                                ${this.getFileIcon(file.content_type, file.is_image)}
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name" title="${file.filename}">${file.filename}</div>
+                                <div class="file-meta">
+                                    <span class="file-size">${file.human_readable_size}</span>
+                                    <span class="file-date">${new Date(file.uploaded_at).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="action-btn download-btn" onclick="app.downloadFile(${file.id})" title="Download">
+                                    📥
+                                </button>
+                                <button class="action-btn delete-btn" onclick="app.deleteFile(${file.id})" title="Delete">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                    `).join("");
+                }
+
+                getFileIcon(contentType, isImage) {
+                    if (isImage) return "🖼️";
+                    if (contentType?.includes("text")) return "📄";
+                    if (contentType?.includes("csv")) return "📊";
+                    return "📎";
+                }
+
+                updateStats(stats) {
+                    document.getElementById("totalFiles").textContent = stats.total_files || 0;
+                    document.getElementById("totalSize").textContent = stats.total_size || "0 B";
+                }
+
+                async downloadFile(fileId) {
+                    try {
+                        const url = `${this.baseUrl}/files/${fileId}/download`;
+                        const response = await fetch(url, {
+                            headers: {
+                                "Authorization": `Bearer ${this.token}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error("Download failed");
+                        }
+
+                        const blob = await response.blob();
+                        const contentDisposition = response.headers.get('Content-Disposition');
+                        let filename = `file_${fileId}`;
+
+                        if (contentDisposition) {
+                            const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                            if (filenameMatch) {
+                                filename = filenameMatch[1].replace(/['"]/g, '');
+                            }
+                        }
+
+                        const downloadUrl = window.URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(downloadUrl);
+
+                        this.showAlert("File downloaded successfully!", "success");
+                    } catch (error) {
+                        this.showAlert("Download failed: " + error.message, "error");
+                    }
+                }
+
+                async deleteFile(fileId) {
+                    if (!confirm("Are you sure you want to delete this file? This action cannot be undone.")) {
+                        return;
+                    }
+
+                    try {
+                        await this.apiCall(`/files/${fileId}`, "DELETE");
+                        this.showAlert("File deleted successfully!", "success");
+                        await this.loadFiles();
+                    } catch (error) {
+                        this.showAlert("Delete failed: " + error.message, "error");
+                    }
                 }
 
                 showAlert(message, type = "info") {
-                    const alertsContainer =
-                        document.getElementById("alertsContainer");
+                    const alertContainer = document.getElementById("alertsContainer");
                     const alert = document.createElement("div");
-                    alert.className = `alert alert-${type === "error" ? "error" : "success"}`;
-
+                    alert.className = `alert alert-${type}`;
                     alert.innerHTML = `
-                    ${message}
-                    <button class="alert-close" onclick="this.parentElement.remove()">×</button>
-                `;
+                        <span>${message}</span>
+                        <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+                    `;
 
-                    alertsContainer.appendChild(alert);
+                    alertContainer.appendChild(alert);
 
-                    // Auto-remove after 5 seconds
                     setTimeout(() => {
                         if (alert.parentElement) {
                             alert.remove();
@@ -1400,39 +1402,19 @@
 
                 setButtonLoading(buttonId, loading) {
                     const button = document.getElementById(buttonId);
-                    const btnText = button.querySelector(".btn-text");
-
                     if (loading) {
                         button.disabled = true;
-                        btnText.textContent = "Loading...";
+                        button.dataset.originalText = button.textContent;
+                        button.innerHTML = '<div class="spinner"></div> Loading...';
                     } else {
                         button.disabled = false;
-                        if (buttonId === "loginBtn") {
-                            btnText.textContent = "Login";
-                        } else if (buttonId === "registerBtn") {
-                            btnText.textContent = "Create Account";
-                        }
+                        button.textContent = button.dataset.originalText;
                     }
-                }
-
-                escapeHtml(text) {
-                    const div = document.createElement("div");
-                    div.textContent = text;
-                    return div.innerHTML;
                 }
             }
 
-            // Initialize the app when DOM is loaded
-            document.addEventListener("DOMContentLoaded", function () {
-                window.snapVault = new SnapVault();
-            });
-
-            // Handle browser back/forward
-            window.addEventListener("popstate", function () {
-                if (window.snapVault) {
-                    window.snapVault.checkAuth();
-                }
-            });
+            // Initialize the application
+            const app = new FileNest();
         </script>
     </body>
 </html>

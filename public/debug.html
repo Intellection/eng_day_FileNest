@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileNest Debug - Register Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        .auth-tab.active {
+            background: white;
+            color: #0088ff;
+        }
+        .auth-form {
+            display: none;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .auth-form.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background: linear-gradient(135deg, #0088ff, #0070f0);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .debug-info {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #0088ff;
+        }
+        .log {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .test-btn {
+            padding: 8px 16px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>FileNest Register Debug Page</h1>
+
+    <div class="test-container">
+        <h2>Quick Tests</h2>
+        <div class="test-buttons">
+            <button class="test-btn" onclick="testTabSwitching()">Test Tab Switching</button>
+            <button class="test-btn" onclick="testFormVisibility()">Test Form Visibility</button>
+            <button class="test-btn" onclick="testFormSubmission()">Test Form Submission</button>
+            <button class="test-btn" onclick="clearLog()">Clear Log</button>
+        </div>
+
+        <div id="status"></div>
+
+        <h3>Console Log</h3>
+        <div id="log" class="log"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>Authentication Test</h2>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Login</button>
+            <button class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <div class="auth-form active" id="loginForm">
+            <h3>Login Form</h3>
+            <form id="loginFormElement" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" name="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn" id="loginBtn">Login</button>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div class="auth-form" id="registerForm">
+            <h3>Register Form</h3>
+            <form id="registerFormElement" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" name="name" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email Address</label>
+                    <input type="email" id="registerEmail" name="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" name="password" required minlength="6" placeholder="Create a password (min 6 characters)">
+                </div>
+                <div class="form-group">
+                    <label for="registerPasswordConfirm">Confirm Password</label>
+                    <input type="password" id="registerPasswordConfirm" name="password_confirmation" required placeholder="Confirm your password">
+                </div>
+                <button type="submit" class="btn" id="registerBtn">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <div class="debug-info">
+            <h3>Debug Information</h3>
+            <p><strong>Current Form:</strong> <span id="currentForm">Login</span></p>
+            <p><strong>Forms Found:</strong> <span id="formsFound">-</span></p>
+            <p><strong>Event Listeners:</strong> <span id="eventListeners">-</span></p>
+            <p><strong>API Base URL:</strong> <span id="apiUrl">http://localhost:3000</span></p>
+        </div>
+    </div>
+
+    <script>
+        const logElement = document.getElementById('log');
+        const statusElement = document.getElementById('status');
+        const baseUrl = 'http://localhost:3000';
+
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `[${timestamp}] ${message}\n`;
+            logElement.textContent += logMessage;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        function setStatus(message, type = 'info') {
+            statusElement.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function clearLog() {
+            logElement.textContent = '';
+            statusElement.innerHTML = '';
+        }
+
+        function switchAuthTab(tab) {
+            log(`Switching to tab: ${tab}`);
+
+            // Update tabs
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(f => {
+                f.classList.remove('active');
+                log(`Removed active class from: ${f.id}`);
+            });
+
+            const targetForm = document.getElementById(`${tab}Form`);
+            if (targetForm) {
+                targetForm.classList.add('active');
+                log(`Added active class to: ${targetForm.id}`);
+                document.getElementById('currentForm').textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
+            } else {
+                log(`ERROR: Target form not found: ${tab}Form`);
+            }
+        }
+
+        function testTabSwitching() {
+            log('=== Testing Tab Switching ===');
+            switchAuthTab('register');
+            setTimeout(() => {
+                switchAuthTab('login');
+                setTimeout(() => {
+                    switchAuthTab('register');
+                    setStatus('Tab switching test completed', 'success');
+                }, 500);
+            }, 500);
+        }
+
+        function testFormVisibility() {
+            log('=== Testing Form Visibility ===');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            log(`Login form display: ${window.getComputedStyle(loginForm).display}`);
+            log(`Register form display: ${window.getComputedStyle(registerForm).display}`);
+
+            switchAuthTab('register');
+            setTimeout(() => {
+                log(`After switch - Login form display: ${window.getComputedStyle(loginForm).display}`);
+                log(`After switch - Register form display: ${window.getComputedStyle(registerForm).display}`);
+                setStatus('Form visibility test completed', 'success');
+            }, 100);
+        }
+
+        function testFormSubmission() {
+            log('=== Testing Form Submission ===');
+            switchAuthTab('register');
+
+            // Fill form with test data
+            document.getElementById('registerName').value = 'Test User Debug';
+            document.getElementById('registerEmail').value = `debug${Date.now()}@example.com`;
+            document.getElementById('registerPassword').value = 'password123';
+            document.getElementById('registerPasswordConfirm').value = 'password123';
+
+            log('Form filled with test data');
+            setStatus('Ready to test form submission - click Create Account button', 'success');
+        }
+
+        async function handleRegister(event) {
+            log('=== Register Form Submitted ===');
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+
+            log(`Form data: ${JSON.stringify(data, null, 2)}`);
+
+            // Password validation
+            if (data.password !== data.password_confirmation) {
+                log('ERROR: Passwords do not match');
+                setStatus('Passwords do not match', 'error');
+                return;
+            }
+
+            // Set button loading state
+            const button = document.getElementById('registerBtn');
+            button.disabled = true;
+            button.textContent = 'Creating Account...';
+
+            try {
+                log('Sending registration request...');
+
+                const response = await fetch(`${baseUrl}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                log(`Response status: ${response.status}`);
+
+                const responseData = await response.json();
+                log(`Response data: ${JSON.stringify(responseData, null, 2)}`);
+
+                if (response.ok && responseData.token) {
+                    log('✅ Registration successful!');
+                    setStatus(`Registration successful! User: ${responseData.user.name}`, 'success');
+                } else {
+                    log(`❌ Registration failed: ${responseData.message}`);
+                    setStatus(`Registration failed: ${responseData.message}`, 'error');
+                }
+
+            } catch (error) {
+                log(`❌ Network error: ${error.message}`);
+                setStatus(`Network error: ${error.message}`, 'error');
+            } finally {
+                // Reset button
+                button.disabled = false;
+                button.textContent = 'Create Account';
+            }
+        }
+
+        async function handleLogin(event) {
+            log('=== Login Form Submitted ===');
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+
+            log(`Login data: ${JSON.stringify(data, null, 2)}`);
+            setStatus('Login form submitted (test only)', 'success');
+        }
+
+        // Initialize debug info
+        document.addEventListener('DOMContentLoaded', () => {
+            log('=== Debug Page Loaded ===');
+
+            const loginForm = document.getElementById('loginFormElement');
+            const registerForm = document.getElementById('registerFormElement');
+
+            document.getElementById('formsFound').textContent =
+                `Login: ${!!loginForm}, Register: ${!!registerForm}`;
+
+            document.getElementById('eventListeners').textContent = 'Attached via HTML attributes';
+
+            log('Page initialization complete');
+            setStatus('Debug page ready - use the test buttons above', 'success');
+        });
+    </script>
+</body>
+</html>

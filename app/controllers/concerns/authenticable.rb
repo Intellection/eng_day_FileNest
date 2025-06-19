@@ -10,6 +10,10 @@ module Authenticable
 
   def authorize_request
     @current_user = AuthorizeApiRequest.new(request.headers).call[:user]
+  rescue ExceptionHandler::MissingToken, ExceptionHandler::InvalidToken, ExceptionHandler::ExpiredSignature, ExceptionHandler::DecodeError => e
+    render json: { message: e.message }, status: :unauthorized
+  rescue ExceptionHandler::AuthenticationError => e
+    render json: { message: e.message }, status: :unauthorized
   end
 
   def current_user

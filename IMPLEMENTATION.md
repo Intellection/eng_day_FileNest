@@ -1,8 +1,8 @@
-# SnapVault Implementation Summary
+# FileNest Implementation Summary
 
 ## 🎯 Project Overview
 
-SnapVault is a complete, production-ready file upload and management system built with Ruby on Rails 8.0.2. It provides secure, user-authenticated file storage with a modern web interface and RESTful API.
+FileNest is a complete, production-ready file upload and management system built with Ruby on Rails 8.0.2. It provides secure, user-authenticated file storage with a modern web interface and RESTful API.
 
 ## 🏗️ Architecture
 
@@ -23,7 +23,7 @@ SnapVault is a complete, production-ready file upload and management system buil
 ## 📁 Project Structure
 
 ```
-snapvault/
+filenest/
 ├── app/
 │   ├── controllers/
 │   │   ├── application_controller.rb      # Base controller with auth
@@ -128,7 +128,7 @@ snapvault/
 ### Installation
 ```bash
 # Clone and setup
-cd snapvault
+cd filenest
 bundle install
 
 # Database setup
@@ -213,8 +213,8 @@ export DATABASE_URL=postgresql://user:pass@host:port/dbname
 ### Docker Deployment
 ```dockerfile
 # Dockerfile already included in the project
-docker build -t snapvault .
-docker run -p 3000:3000 snapvault
+docker build -t filenest .
+docker run -p 3000:3000 filenest
 ```
 
 ### Cloud Platforms
@@ -260,7 +260,7 @@ The codebase follows Rails conventions and best practices:
 
 ## 📄 License
 
-SnapVault is open source and available under the MIT License, making it suitable for both personal and commercial use.
+FileNest is open source and available under the MIT License, making it suitable for both personal and commercial use.
 
 ---
 

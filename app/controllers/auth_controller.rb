@@ -28,7 +28,7 @@ class AuthController < ApplicationController
       token = Auth::JwtService.encode(@user.to_token_payload)
       time = Time.current + 24.hours.to_i
       render json: {
-        message: Message.account_created,
+        message: "Account created successfully! Welcome to FileNest.",
         token: token,
         exp: time.strftime("%m-%d-%Y %H:%M"),
         user: {

@@ -6,17 +6,17 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # SnapVault health check
-  get "health", to: "health#show"
+  get "health", to: "health#show", as: :health
 
   # SnapVault Authentication routes
-  post "auth/login", to: "auth#login"
-  post "auth/register", to: "auth#register"
+  post "auth/login", to: "auth#login", as: :auth_login
+  post "auth/register", to: "auth#register", as: :auth_register
 
   # SnapVault File operations
-  post "upload", to: "uploads#create"
-  get "files", to: "files#index"
-  get "files/:id", to: "files#show"
-  get "files/:id/download", to: "files#download"
+  post "upload", to: "uploads#create", as: :upload
+  get "files", to: "files#index", as: :files
+  get "files/:id", to: "files#show", as: :file
+  get "files/:id/download", to: "files#download", as: :download_file
   delete "files/:id", to: "files#destroy"
 
   # Defines the root path route ("/")

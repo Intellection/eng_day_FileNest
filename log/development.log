@@ -392,3 +392,1089 @@ Processing by FilesController#index as */*
 Completed 200 OK in 6ms (Views: 0.1ms | ActiveRecord: 0.4ms (7 queries, 1 cached) | GC: 0.6ms)
 
 
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+Started GET "/health" for ::1 at 2025-06-19 11:20:42 +0100
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+Processing by HealthController#show as */*
+  [1m[36mActiveStorage::Blob Count (1.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "active_storage_blobs" /*action='show',application='Filenest',controller='health'*/[0m
+  ↳ app/controllers/health_controller.rb:38:in `storage_status'
+Completed 200 OK in 44ms (Views: 0.2ms | ActiveRecord: 1.6ms (1 query, 0 cached) | GC: 1.7ms)
+
+
+Started POST "/auth/register" for ::1 at 2025-06-19 11:22:34 +0100
+Processing by AuthController#register as */*
+  Parameters: {"name"=>"Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"name"=>"Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: register, request: #<ActionDispatch::Request:0x000000012363c440>, params: {"name"=>"Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"register", "auth"=>{"name"=>"Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('test@example.com') LIMIT 1 /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+Completed 422 Unprocessable Content in 297ms (Views: 0.2ms | ActiveRecord: 1.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/auth/login" for ::1 at 2025-06-19 11:22:45 +0100
+Processing by AuthController#login as */*
+  Parameters: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: login, request: #<ActionDispatch::Request:0x0000000125e34f60>, params: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"login", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'test@example.com' LIMIT 1 /*action='login',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:6:in `login'
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: login, request: #<ActionDispatch::Request:0x0000000125e34f60>, params: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"login", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+Completed 200 OK in 283ms (Views: 0.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:23:01 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x0000000125edd070 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-18258-ya8pmt.txt>, @content_type="text/plain", @original_filename="test_file.txt", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test_file.txt\"\r\nContent-Type: text/plain\r\n">}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: application/octet-stream for file: test_file.txt
+Using fallback MIME type: text/plain for extension: .txt
+Final MIME type used: text/plain
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (10.8ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (1, 'test_file.txt', 'text/plain', 26, '2025-06-19 10:23:01.318243', '2025-06-19 10:23:01.318438', '2025-06-19 10:23:01.318438') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 3 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 3 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('kyw7u5263so7tvmeb9pv78v1sko0', 'test_file.txt', 'text/plain', '{"identified":true}', 'local', 26, 'QqRB9QpaXLp5/5Mpwu5qzA==', '2025-06-19 10:23:01.353002') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 3, 3, '2025-06-19 10:23:01.354105') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:23:01.354692' WHERE "user_files"."id" = 3 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.4ms) [0m[32mUploaded file to key: kyw7u5263so7tvmeb9pv78v1sko0 (checksum: QqRB9QpaXLp5/5Mpwu5qzA==)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Update (0.5ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 3 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 3 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 3 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:23:01.364634' WHERE "user_files"."id" = 3 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 68ms (Views: 0.1ms | ActiveRecord: 13.1ms (11 queries, 0 cached) | GC: 12.8ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:23:14 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.3ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 1 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mActiveStorage::Attachment Load (0.1ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = 3 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 3 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 1 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.0ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 1 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.0ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 1[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 6ms (Views: 0.1ms | ActiveRecord: 0.7ms (7 queries, 1 cached) | GC: 0.0ms)
+
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "record_type" varchar NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id") /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_blobs" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "active_storage_blobs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "key" varchar NOT NULL, "filename" varchar NOT NULL, "content_type" varchar, "metadata" text, "service_name" varchar NOT NULL, "byte_size" bigint NOT NULL, "checksum" varchar, "created_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_blobs_on_key" ON "active_storage_blobs" ("key") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "active_storage_variant_records" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "blob_id" bigint NOT NULL, "variation_digest" varchar NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_variant_records_uniqueness" ON "active_storage_variant_records" ("blob_id", "variation_digest") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "user_files" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "user_files" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "filename" varchar, "content_type" varchar, "file_size" integer, "uploaded_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_user_files_on_user_id" ON "user_files" ("user_id") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "users" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar, "password_digest" varchar, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email") /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest'*/[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mPRAGMA foreign_keys /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aactive_storage_attachments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "record_type" varchar NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "tindex_aactive_storage_attachments_uniqueness" ON "aactive_storage_attachments" ("record_type", "record_id", "name", "blob_id") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_aactive_storage_attachments_on_blob_id" ON "aactive_storage_attachments" ("blob_id") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "aactive_storage_attachments" ("id","name","record_type","record_id","blob_id","created_at")
+                     SELECT "id","name","record_type","record_id","blob_id","created_at" FROM "active_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "active_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "record_type" varchar NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c3b3935057"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("id","name","record_type","record_id","blob_id","created_at")
+                     SELECT "id","name","record_type","record_id","blob_id","created_at" FROM "aactive_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "aactive_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0 /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1 /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest'*/[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mPRAGMA foreign_keys /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aactive_storage_variant_records" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "blob_id" bigint NOT NULL, "variation_digest" varchar NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "tindex_aactive_storage_variant_records_uniqueness" ON "aactive_storage_variant_records" ("blob_id", "variation_digest") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "aactive_storage_variant_records" ("id","blob_id","variation_digest")
+                     SELECT "id","blob_id","variation_digest" FROM "active_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "active_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "active_storage_variant_records" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "blob_id" bigint NOT NULL, "variation_digest" varchar NOT NULL, CONSTRAINT "fk_rails_993965df05"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_variant_records_uniqueness" ON "active_storage_variant_records" ("blob_id", "variation_digest") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_variant_records" ("id","blob_id","variation_digest")
+                     SELECT "id","blob_id","variation_digest" FROM "aactive_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "aactive_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0 /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1 /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest'*/[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mPRAGMA foreign_keys /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "auser_files" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "filename" varchar, "content_type" varchar, "file_size" integer, "uploaded_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_auser_files_on_user_id" ON "auser_files" ("user_id") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "auser_files" ("id","user_id","filename","content_type","file_size","uploaded_at","created_at","updated_at")
+                     SELECT "id","user_id","filename","content_type","file_size","uploaded_at","created_at","updated_at" FROM "user_files" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "user_files" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "user_files" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "filename" varchar, "content_type" varchar, "file_size" integer, "uploaded_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_43d7c1bb88"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_user_files_on_user_id" ON "user_files" ("user_id") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "user_files" ("id","user_id","filename","content_type","file_size","uploaded_at","created_at","updated_at")
+                     SELECT "id","user_id","filename","content_type","file_size","uploaded_at","created_at","updated_at" FROM "auser_files" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "auser_files" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0 /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1 /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY) /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20250619090845) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20250619090838),
+(20250619090831); /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2025-06-19 10:30:00.469557', '2025-06-19 10:30:00.469558') RETURNING "key" /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.0ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = 'test', "updated_at" = '2025-06-19 10:30:00.470362' WHERE "ar_internal_metadata"."key" = 'environment' /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'schema_sha1' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', 'edf8dfba8955a9de38ea4c1d6d873bde91640698', '2025-06-19 10:30:00.470961', '2025-06-19 10:30:00.470962') RETURNING "key" /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "record_type" varchar NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id") /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_blobs" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "active_storage_blobs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "key" varchar NOT NULL, "filename" varchar NOT NULL, "content_type" varchar, "metadata" text, "service_name" varchar NOT NULL, "byte_size" bigint NOT NULL, "checksum" varchar, "created_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_blobs_on_key" ON "active_storage_blobs" ("key") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "active_storage_variant_records" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "blob_id" bigint NOT NULL, "variation_digest" varchar NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_variant_records_uniqueness" ON "active_storage_variant_records" ("blob_id", "variation_digest") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "user_files" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "user_files" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "filename" varchar, "content_type" varchar, "file_size" integer, "uploaded_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_user_files_on_user_id" ON "user_files" ("user_id") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "users" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar, "password_digest" varchar, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email") /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest'*/[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mPRAGMA foreign_keys /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aactive_storage_attachments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "record_type" varchar NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "tindex_aactive_storage_attachments_uniqueness" ON "aactive_storage_attachments" ("record_type", "record_id", "name", "blob_id") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_aactive_storage_attachments_on_blob_id" ON "aactive_storage_attachments" ("blob_id") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "aactive_storage_attachments" ("id","name","record_type","record_id","blob_id","created_at")
+                     SELECT "id","name","record_type","record_id","blob_id","created_at" FROM "active_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "active_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "record_type" varchar NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c3b3935057"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id") /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("id","name","record_type","record_id","blob_id","created_at")
+                     SELECT "id","name","record_type","record_id","blob_id","created_at" FROM "aactive_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "aactive_storage_attachments" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0 /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1 /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest'*/[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mPRAGMA foreign_keys /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aactive_storage_variant_records" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "blob_id" bigint NOT NULL, "variation_digest" varchar NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "tindex_aactive_storage_variant_records_uniqueness" ON "aactive_storage_variant_records" ("blob_id", "variation_digest") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "aactive_storage_variant_records" ("id","blob_id","variation_digest")
+                     SELECT "id","blob_id","variation_digest" FROM "active_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "active_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "active_storage_variant_records" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "blob_id" bigint NOT NULL, "variation_digest" varchar NOT NULL, CONSTRAINT "fk_rails_993965df05"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_variant_records_uniqueness" ON "active_storage_variant_records" ("blob_id", "variation_digest") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_variant_records" ("id","blob_id","variation_digest")
+                     SELECT "id","blob_id","variation_digest" FROM "aactive_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "aactive_storage_variant_records" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0 /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1 /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest'*/[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mPRAGMA foreign_keys /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "auser_files" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "filename" varchar, "content_type" varchar, "file_size" integer, "uploaded_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_auser_files_on_user_id" ON "auser_files" ("user_id") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "auser_files" ("id","user_id","filename","content_type","file_size","uploaded_at","created_at","updated_at")
+                     SELECT "id","user_id","filename","content_type","file_size","uploaded_at","created_at","updated_at" FROM "user_files" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "user_files" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "user_files" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "filename" varchar, "content_type" varchar, "file_size" integer, "uploaded_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_43d7c1bb88"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_user_files_on_user_id" ON "user_files" ("user_id") /*application='Filenest'*/[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "user_files" ("id","user_id","filename","content_type","file_size","uploaded_at","created_at","updated_at")
+                     SELECT "id","user_id","filename","content_type","file_size","uploaded_at","created_at","updated_at" FROM "auser_files" /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "auser_files" /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0 /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1 /*application='Filenest'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY) /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20250619090845) /*application='Filenest'*/[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20250619090838),
+(20250619090831); /*application='Filenest'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2025-06-19 10:32:38.643017', '2025-06-19 10:32:38.643018') RETURNING "key" /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.0ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = 'test', "updated_at" = '2025-06-19 10:32:38.644356' WHERE "ar_internal_metadata"."key" = 'environment' /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'schema_sha1' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Filenest'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', 'edf8dfba8955a9de38ea4c1d6d873bde91640698', '2025-06-19 10:32:38.645021', '2025-06-19 10:32:38.645022') RETURNING "key" /*application='Filenest'*/[0m
+Started GET "/health" for ::1 at 2025-06-19 11:38:55 +0100
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+Processing by HealthController#show as */*
+  [1m[36mActiveStorage::Blob Count (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "active_storage_blobs" /*action='show',application='Filenest',controller='health'*/[0m
+  ↳ app/controllers/health_controller.rb:38:in `storage_status'
+Completed 200 OK in 15ms (Views: 0.2ms | ActiveRecord: 1.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/auth/register" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by AuthController#register as */*
+  Parameters: {"name"=>"Test User 1750329536", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"name"=>"Test User 1750329536", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: register, request: #<ActionDispatch::Request:0x0000000122e83708>, params: {"name"=>"Test User 1750329536", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"register", "auth"=>{"name"=>"Test User 1750329536", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('test1750329536@example.com') LIMIT 1 /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Create (0.1ms)[0m  [1m[32mINSERT INTO "users" ("email", "password_digest", "name", "created_at", "updated_at") VALUES ('test1750329536@example.com', '$2a$12$NotFSWgO36NC3ptHt8bYq.NYA7iS0/ejEPLpmb73o0O./m7JSdz76', 'Test User 1750329536', '2025-06-19 10:38:56.331719', '2025-06-19 10:38:56.331719') RETURNING "id" /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+Completed 201 Created in 286ms (Views: 0.1ms | ActiveRecord: 1.6ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/auth/login" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by AuthController#login as */*
+  Parameters: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: login, request: #<ActionDispatch::Request:0x00000001272d7800>, params: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"login", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'test1750329536@example.com' LIMIT 1 /*action='login',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:6:in `login'
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: login, request: #<ActionDispatch::Request:0x00000001272d7800>, params: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"login", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+Completed 200 OK in 280ms (Views: 0.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/auth/login" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by AuthController#login as */*
+  Parameters: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: login, request: #<ActionDispatch::Request:0x00000001272f14a8>, params: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"login", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'nonexistent@example.com' LIMIT 1 /*action='login',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:6:in `login'
+Completed 401 Unauthorized in 1ms (Views: 0.0ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x0000000127315920 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-i28rhu.txt>, @content_type="application/octet-stream", @original_filename="test20250619-22956-6uhaua.txt", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-22956-6uhaua.txt\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: application/octet-stream for file: test20250619-22956-6uhaua.txt
+Using fallback MIME type: text/plain for extension: .txt
+Final MIME type used: text/plain
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-22956-6uhaua.txt' AND "user_files"."user_id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (0.1ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (4, 'test20250619-22956-6uhaua.txt', 'text/plain', 86, '2025-06-19 10:38:56.643668', '2025-06-19 10:38:56.644801', '2025-06-19 10:38:56.644801') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-22956-6uhaua.txt' AND "user_files"."id" != 4 AND "user_files"."user_id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 4 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 4 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('45l8fhns29e7tggzld370ptbq07u', 'test20250619-22956-6uhaua.txt', 'text/plain', '{"identified":true}', 'local', 86, 'G8mTdSLW+wRytjAUtECRvw==', '2025-06-19 10:38:56.668358') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 4, 4, '2025-06-19 10:38:56.669230') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:38:56.670010' WHERE "user_files"."id" = 4 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: 45l8fhns29e7tggzld370ptbq07u (checksum: G8mTdSLW+wRytjAUtECRvw==)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Update (0.5ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 4 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 4 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 4 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:38:56.677497' WHERE "user_files"."id" = 4 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 45ms (Views: 0.1ms | ActiveRecord: 2.5ms (13 queries, 0 cached) | GC: 11.6ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x000000012767def0 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-voav71.png>, @content_type="application/octet-stream", @original_filename="test20250619-22956-19smgz.png", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-22956-19smgz.png\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: image/png for file: test20250619-22956-19smgz.png
+Final MIME type used: image/png
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-22956-19smgz.png' AND "user_files"."user_id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (0.1ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (4, 'test20250619-22956-19smgz.png', 'image/png', 88, '2025-06-19 10:38:56.685986', '2025-06-19 10:38:56.687200', '2025-06-19 10:38:56.687200') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-22956-19smgz.png' AND "user_files"."id" != 5 AND "user_files"."user_id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 5 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 5 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('z99m9vrhjzt6skhcuajtwh3ds3a3', 'test20250619-22956-19smgz.png', 'image/png', '{"identified":true}', 'local', 88, 'g+MA2AMqa3jwgoxx9l3tyg==', '2025-06-19 10:38:56.691025') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 5, 5, '2025-06-19 10:38:56.691965') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:38:56.692539' WHERE "user_files"."id" = 5 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.4ms) [0m[32mUploaded file to key: z99m9vrhjzt6skhcuajtwh3ds3a3 (checksum: g+MA2AMqa3jwgoxx9l3tyg==)[0m
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: 156cec2c-853b-469a-a9c2-9f64da7c4a8e) to Async(default) with arguments: #<GlobalID:0x0000000127533338 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/5>>
+[ActiveJob] ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 19ms (Views: 0.1ms | ActiveRecord: 1.5ms (9 queries, 0 cached) | GC: 0.8ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:38:56 +0100
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e]   [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 5 LIMIT 1 /*application='Filenest'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e] Performing ActiveStorage::AnalyzeJob (Job ID: 156cec2c-853b-469a-a9c2-9f64da7c4a8e) from Async(default) enqueued at 2025-06-19T10:38:56.703196000Z with arguments: #<GlobalID:0x00000001278b88a0 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/5>>
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x0000000127514258 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-mx3hy7.md>, @content_type="application/octet-stream", @original_filename="test20250619-22956-hsuc6g.md", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-22956-hsuc6g.md\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e] Skipping image analysis because the ruby-vips gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e]   [1m[36mActiveStorage::Blob Update (9.1ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 5 /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e]   [1m[36mActiveStorage::Attachment Load (0.1ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 5 /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e]   [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 5 /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e]   [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:38:56.759765' WHERE "user_files"."id" = 5 /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e]   [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [156cec2c-853b-469a-a9c2-9f64da7c4a8e] Performed ActiveStorage::AnalyzeJob (Job ID: 156cec2c-853b-469a-a9c2-9f64da7c4a8e) from Async(default) in 51.62ms
+Marcel detected MIME type: application/octet-stream for file: test20250619-22956-hsuc6g.md
+Using fallback MIME type: text/markdown for extension: .md
+Final MIME type used: text/markdown
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-22956-hsuc6g.md' AND "user_files"."user_id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (0.1ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (4, 'test20250619-22956-hsuc6g.md', 'text/markdown', 171, '2025-06-19 10:38:56.762400', '2025-06-19 10:38:56.763345', '2025-06-19 10:38:56.763345') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-22956-hsuc6g.md' AND "user_files"."id" != 6 AND "user_files"."user_id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 6 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 6 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('p0nvtwes4rlb4bku4kumzrr21jlz', 'test20250619-22956-hsuc6g.md', 'text/markdown', '{"identified":true}', 'local', 171, 'l4OpUZIs9sbzR8Mob/poiw==', '2025-06-19 10:38:56.768957') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 6, 6, '2025-06-19 10:38:56.769607') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:38:56.770161' WHERE "user_files"."id" = 6 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: p0nvtwes4rlb4bku4kumzrr21jlz (checksum: l4OpUZIs9sbzR8Mob/poiw==)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Update (0.5ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 6 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 6 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 6 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:38:56.774007' WHERE "user_files"."id" = 6 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 40ms (Views: 0.1ms | ActiveRecord: 1.9ms (13 queries, 0 cached) | GC: 9.4ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x0000000127298948 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-5jxi56.csv>, @content_type="application/octet-stream", @original_filename="test20250619-22956-3j33cb.csv", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-22956-3j33cb.csv\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: application/octet-stream for file: test20250619-22956-3j33cb.csv
+Using fallback MIME type: text/csv for extension: .csv
+Final MIME type used: text/csv
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-22956-3j33cb.csv' AND "user_files"."user_id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (0.0ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (4, 'test20250619-22956-3j33cb.csv', 'text/csv', 203, '2025-06-19 10:38:56.786530', '2025-06-19 10:38:56.787392', '2025-06-19 10:38:56.787392') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-22956-3j33cb.csv' AND "user_files"."id" != 7 AND "user_files"."user_id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 7 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 7 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('q5uufxowhqogeq8lllhbl51d9goi', 'test20250619-22956-3j33cb.csv', 'text/csv', '{"identified":true}', 'local', 203, 'CKdXdHmz7bwHHzywtW9+Ow==', '2025-06-19 10:38:56.792079') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 7, 7, '2025-06-19 10:38:56.792711') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:38:56.793236' WHERE "user_files"."id" = 7 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: q5uufxowhqogeq8lllhbl51d9goi (checksum: CKdXdHmz7bwHHzywtW9+Ow==)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Update (6.6ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 7 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.1ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 7 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 7 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:38:56.803693' WHERE "user_files"."id" = 7 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 21ms (Views: 0.1ms | ActiveRecord: 7.9ms (13 queries, 0 cached) | GC: 5.9ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.1ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 4 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mActiveStorage::Attachment Load (0.1ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" IN (7, 6, 5, 4) /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" IN (4, 5, 6, 7) /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 4 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.1ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 4 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.0ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 4[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 6ms (Views: 0.1ms | ActiveRecord: 0.4ms (7 queries, 1 cached) | GC: 0.3ms)
+
+
+Started GET "/files/4/download" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by FilesController#download as */*
+  Parameters: {"id"=>"4"}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='download',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 4 LIMIT 1 /*action='download',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:82:in `set_user_file'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 4 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='download',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:58:in `download'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 4 LIMIT 1 /*action='download',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:59:in `download'
+Redirected to http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6NCwicHVyIjoiYmxvYl9pZCJ9fQ==--daede81934e63194f26c294c8a3975f2e5ecd685/test20250619-22956-6uhaua.txt?disposition=attachment
+Completed 302 Found in 2ms (ActiveRecord: 0.1ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started DELETE "/files/7" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by FilesController#destroy as */*
+  Parameters: {"id"=>"7"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 7 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:82:in `set_user_file'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Load (0.5ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 7 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_attachments" WHERE "active_storage_attachments"."id" = 7 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mUserFile Destroy (0.0ms)[0m  [1m[31mDELETE FROM "user_files" WHERE "user_files"."id" = 7 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 7 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+[ActiveJob] Enqueued ActiveStorage::PurgeJob (Job ID: 50f657ed-beb4-4bbd-ab89-6322dca48381) to Async(default) with arguments: #<GlobalID:0x000000012707ad50 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/7>>
+[ActiveJob] ↳ app/controllers/files_controller.rb:69:in `destroy'
+Completed 200 OK in 6ms (Views: 0.1ms | ActiveRecord: 1.0ms (6 queries, 0 cached) | GC: 0.1ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:38:56 +0100
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 7 LIMIT 1 /*application='Filenest'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381] Performing ActiveStorage::PurgeJob (Job ID: 50f657ed-beb4-4bbd-ab89-6322dca48381) from Async(default) enqueued at 2025-06-19T10:38:56.839262000Z with arguments: #<GlobalID:0x00000001278fcd98 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/7>>
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381]   [1m[36mActiveStorage::Attachment Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 7 LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381]   [1m[36mActiveStorage::VariantRecord Load (0.0ms)[0m  [1m[34mSELECT "active_storage_variant_records".* FROM "active_storage_variant_records" WHERE "active_storage_variant_records"."blob_id" = 7 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381]   [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 7 AND "active_storage_attachments"."record_type" = 'ActiveStorage::Blob' AND "active_storage_attachments"."name" = 'preview_image' LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381]   [1m[36mActiveStorage::Blob Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 7 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381] [36m  Disk Storage (0.1ms) [0m[31mDeleted file from key: q5uufxowhqogeq8lllhbl51d9goi[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [50f657ed-beb4-4bbd-ab89-6322dca48381] Performed ActiveStorage::PurgeJob (Job ID: 50f657ed-beb4-4bbd-ab89-6322dca48381) from Async(default) in 7.36ms
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x00000001275faf50 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-n07x3b.exe>, @content_type="application/octet-stream", @original_filename="test20250619-22956-53ub1h.exe", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-22956-53ub1h.exe\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: application/x-msdownload for file: test20250619-22956-53ub1h.exe
+Final MIME type used: application/x-msdownload
+Completed 422 Unprocessable Content in 2ms (Views: 0.1ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:38:56 +0100
+Processing by FilesController#index as */*
+Completed 422 Unprocessable Content in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/health" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by HealthController#show as */*
+  [1m[36mActiveStorage::Blob Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "active_storage_blobs" /*action='show',application='Filenest',controller='health'*/[0m
+  ↳ app/controllers/health_controller.rb:38:in `storage_status'
+Completed 200 OK in 4ms (Views: 0.1ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started POST "/auth/register" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by AuthController#register as */*
+  Parameters: {"name"=>"Test User 1750329573", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"name"=>"Test User 1750329573", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: register, request: #<ActionDispatch::Request:0x00000001272ff1e8>, params: {"name"=>"Test User 1750329573", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"register", "auth"=>{"name"=>"Test User 1750329573", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('test1750329573@example.com') LIMIT 1 /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Create (0.1ms)[0m  [1m[32mINSERT INTO "users" ("email", "password_digest", "name", "created_at", "updated_at") VALUES ('test1750329573@example.com', '$2a$12$/Il5QARDrl7m.z5ctibDp.IEWMGh544BigwUJAxVC7Zk/w45sGq.S', 'Test User 1750329573', '2025-06-19 10:39:33.342879', '2025-06-19 10:39:33.342879') RETURNING "id" /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+Completed 201 Created in 286ms (Views: 0.1ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started POST "/auth/login" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by AuthController#login as */*
+  Parameters: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: login, request: #<ActionDispatch::Request:0x000000012551d530>, params: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"login", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'test1750329573@example.com' LIMIT 1 /*action='login',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:6:in `login'
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: login, request: #<ActionDispatch::Request:0x000000012551d530>, params: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"login", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+Completed 200 OK in 279ms (Views: 0.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/auth/login" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by AuthController#login as */*
+  Parameters: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: login, request: #<ActionDispatch::Request:0x0000000127618488>, params: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"login", "auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'nonexistent@example.com' LIMIT 1 /*action='login',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:6:in `login'
+Completed 401 Unauthorized in 1ms (Views: 0.0ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x00000001256fc360 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-zaeuxm.txt>, @content_type="application/octet-stream", @original_filename="test20250619-23195-9hn1.txt", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-23195-9hn1.txt\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: application/octet-stream for file: test20250619-23195-9hn1.txt
+Using fallback MIME type: text/plain for extension: .txt
+Final MIME type used: text/plain
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-23195-9hn1.txt' AND "user_files"."user_id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (0.1ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (5, 'test20250619-23195-9hn1.txt', 'text/plain', 86, '2025-06-19 10:39:33.649291', '2025-06-19 10:39:33.650537', '2025-06-19 10:39:33.650537') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-23195-9hn1.txt' AND "user_files"."id" != 8 AND "user_files"."user_id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 8 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.3ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 8 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('bok8lhvsmw9r2et46160c2y3c272', 'test20250619-23195-9hn1.txt', 'text/plain', '{"identified":true}', 'local', 86, 'wF9VaxkC6nHbRKtExqR9CA==', '2025-06-19 10:39:33.663578') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 8, 8, '2025-06-19 10:39:33.664281') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:39:33.664823' WHERE "user_files"."id" = 8 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: bok8lhvsmw9r2et46160c2y3c272 (checksum: wF9VaxkC6nHbRKtExqR9CA==)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Update (0.5ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 8 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.1ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 8 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 8 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:39:33.669548' WHERE "user_files"."id" = 8 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 28ms (Views: 0.1ms | ActiveRecord: 5.8ms (13 queries, 0 cached) | GC: 3.6ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x0000000127678900 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-4h24j6.png>, @content_type="application/octet-stream", @original_filename="test20250619-23195-p3ow0r.png", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-23195-p3ow0r.png\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: image/png for file: test20250619-23195-p3ow0r.png
+Final MIME type used: image/png
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-23195-p3ow0r.png' AND "user_files"."user_id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (0.1ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (5, 'test20250619-23195-p3ow0r.png', 'image/png', 88, '2025-06-19 10:39:33.678231', '2025-06-19 10:39:33.679951', '2025-06-19 10:39:33.679951') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-23195-p3ow0r.png' AND "user_files"."id" != 9 AND "user_files"."user_id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 9 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 9 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('lk74d69ijm80vio79f6y5fo1p3v7', 'test20250619-23195-p3ow0r.png', 'image/png', '{"identified":true}', 'local', 88, 'g+MA2AMqa3jwgoxx9l3tyg==', '2025-06-19 10:39:33.683669') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 9, 9, '2025-06-19 10:39:33.684386') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:39:33.684939' WHERE "user_files"."id" = 9 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: lk74d69ijm80vio79f6y5fo1p3v7 (checksum: g+MA2AMqa3jwgoxx9l3tyg==)[0m
+[ActiveJob] Enqueued ActiveStorage::AnalyzeJob (Job ID: a4fe3c93-a9f3-4ae1-8901-7f3b06065629) to Async(default) with arguments: #<GlobalID:0x0000000127952bd0 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/9>>
+[ActiveJob] ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 11ms (Views: 0.1ms | ActiveRecord: 1.5ms (9 queries, 0 cached) | GC: 0.5ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:39:33 +0100
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 9 LIMIT 1 /*application='Filenest'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629] Performing ActiveStorage::AnalyzeJob (Job ID: a4fe3c93-a9f3-4ae1-8901-7f3b06065629) from Async(default) enqueued at 2025-06-19T10:39:33.687070000Z with arguments: #<GlobalID:0x00000001278badd0 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/9>>
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629] Skipping image analysis because the ruby-vips gem isn't installed
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629]   [1m[36mActiveStorage::Blob Update (0.6ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 9 /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629]   [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 9 /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629]   [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 9 /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629]   [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:39:33.701119' WHERE "user_files"."id" = 9 /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3AAnalyzeJob'*/[0m
+[ActiveJob] [ActiveStorage::AnalyzeJob] [a4fe3c93-a9f3-4ae1-8901-7f3b06065629] Performed ActiveStorage::AnalyzeJob (Job ID: a4fe3c93-a9f3-4ae1-8901-7f3b06065629) from Async(default) in 9.52ms
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x0000000124fc0380 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-fjdjaw.md>, @content_type="application/octet-stream", @original_filename="test20250619-23195-dfydtl.md", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-23195-dfydtl.md\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: application/octet-stream for file: test20250619-23195-dfydtl.md
+Using fallback MIME type: text/markdown for extension: .md
+Final MIME type used: text/markdown
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-23195-dfydtl.md' AND "user_files"."user_id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (0.1ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (5, 'test20250619-23195-dfydtl.md', 'text/markdown', 171, '2025-06-19 10:39:33.706861', '2025-06-19 10:39:33.707780', '2025-06-19 10:39:33.707780') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-23195-dfydtl.md' AND "user_files"."id" != 10 AND "user_files"."user_id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 10 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 10 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('tn91xxo7rkxoft54atua6aoh2hw8', 'test20250619-23195-dfydtl.md', 'text/markdown', '{"identified":true}', 'local', 171, 'WKYm/AGgJjh3GWYBpMg1sw==', '2025-06-19 10:39:33.712853') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 10, 10, '2025-06-19 10:39:33.713785') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:39:33.714358' WHERE "user_files"."id" = 10 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.6ms) [0m[32mUploaded file to key: tn91xxo7rkxoft54atua6aoh2hw8 (checksum: WKYm/AGgJjh3GWYBpMg1sw==)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Update (0.5ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 10 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 10 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 10 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:39:33.718859' WHERE "user_files"."id" = 10 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 16ms (Views: 0.1ms | ActiveRecord: 1.9ms (13 queries, 0 cached) | GC: 0.6ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x00000001272952e8 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-py1cek.csv>, @content_type="application/octet-stream", @original_filename="test20250619-23195-80skao.csv", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-23195-80skao.csv\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: application/octet-stream for file: test20250619-23195-80skao.csv
+Using fallback MIME type: text/csv for extension: .csv
+Final MIME type used: text/csv
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-23195-80skao.csv' AND "user_files"."user_id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mUserFile Create (0.0ms)[0m  [1m[32mINSERT INTO "user_files" ("user_id", "filename", "content_type", "file_size", "uploaded_at", "created_at", "updated_at") VALUES (5, 'test20250619-23195-80skao.csv', 'text/csv', 203, '2025-06-19 10:39:33.727727', '2025-06-19 10:39:33.728626', '2025-06-19 10:39:33.728626') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:79:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Exists? (3.7ms)[0m  [1m[34mSELECT 1 AS one FROM "user_files" WHERE "user_files"."filename" = 'test20250619-23195-80skao.csv' AND "user_files"."id" != 11 AND "user_files"."user_id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" INNER JOIN "active_storage_attachments" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "active_storage_attachments"."record_id" = 11 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 11 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Create (0.1ms)[0m  [1m[32mINSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "metadata", "service_name", "byte_size", "checksum", "created_at") VALUES ('1cdm6yrlnwzdbh3w3ssd1zwmnds2', 'test20250619-23195-80skao.csv', 'text/csv', '{"identified":true}', 'local', 203, 'd1eHuBBfIxiE17MICC9yyg==', '2025-06-19 10:39:33.736983') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Create (0.0ms)[0m  [1m[32mINSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES ('file', 'UserFile', 11, 11, '2025-06-19 10:39:33.737679') RETURNING "id" /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:39:33.738205' WHERE "user_files"."id" = 11 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+[36m  Disk Storage (0.5ms) [0m[32mUploaded file to key: 1cdm6yrlnwzdbh3w3ssd1zwmnds2 (checksum: d1eHuBBfIxiE17MICC9yyg==)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Blob Update (0.5ms)[0m  [1m[33mUPDATE "active_storage_blobs" SET "metadata" = '{"identified":true,"analyzed":true}' WHERE "active_storage_blobs"."id" = 11 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 11 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 11 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mUserFile Update (0.0ms)[0m  [1m[33mUPDATE "user_files" SET "updated_at" = '2025-06-19 10:39:33.742536' WHERE "user_files"."id" = 11 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/controllers/uploads_controller.rb:81:in `create'
+Completed 201 Created in 18ms (Views: 0.1ms | ActiveRecord: 5.2ms (13 queries, 0 cached) | GC: 3.6ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 5 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" IN (11, 10, 9, 8) /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mActiveStorage::Blob Load (0.1ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" IN (8, 9, 10, 11) /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 5 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.0ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 5 /*action='index',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.0ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 5[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 4ms (Views: 0.1ms | ActiveRecord: 0.3ms (7 queries, 1 cached) | GC: 0.1ms)
+
+
+Started GET "/files/8/download" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by FilesController#download as */*
+  Parameters: {"id"=>"8"}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='download',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 8 LIMIT 1 /*action='download',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:82:in `set_user_file'
+  [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 8 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='download',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:58:in `download'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 8 LIMIT 1 /*action='download',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:59:in `download'
+Redirected to http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6OCwicHVyIjoiYmxvYl9pZCJ9fQ==--0a3165749091d982eb40e3c5780e0eda376cb952/test20250619-23195-9hn1.txt?disposition=attachment
+Completed 302 Found in 2ms (ActiveRecord: 0.1ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started DELETE "/files/11" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by FilesController#destroy as */*
+  Parameters: {"id"=>"11"}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 11 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:82:in `set_user_file'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 11 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_attachments" WHERE "active_storage_attachments"."id" = 11 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mUserFile Destroy (0.0ms)[0m  [1m[31mDELETE FROM "user_files" WHERE "user_files"."id" = 11 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 11 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+[ActiveJob] Enqueued ActiveStorage::PurgeJob (Job ID: f4359f8a-72ff-4c67-8ecb-46446fafd685) to Async(default) with arguments: #<GlobalID:0x00000001276fa0b8 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/11>>
+[ActiveJob] ↳ app/controllers/files_controller.rb:69:in `destroy'
+Completed 200 OK in 4ms (Views: 0.0ms | ActiveRecord: 0.6ms (6 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:39:33 +0100
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 11 LIMIT 1 /*application='Filenest'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685] Performing ActiveStorage::PurgeJob (Job ID: f4359f8a-72ff-4c67-8ecb-46446fafd685) from Async(default) enqueued at 2025-06-19T10:39:33.768739000Z with arguments: #<GlobalID:0x000000012481d510 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/11>>
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685]   [1m[36mActiveStorage::Attachment Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 11 LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685]   [1m[36mActiveStorage::VariantRecord Load (0.0ms)[0m  [1m[34mSELECT "active_storage_variant_records".* FROM "active_storage_variant_records" WHERE "active_storage_variant_records"."blob_id" = 11 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685]   [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 11 AND "active_storage_attachments"."record_type" = 'ActiveStorage::Blob' AND "active_storage_attachments"."name" = 'preview_image' LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685]   [1m[36mActiveStorage::Blob Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 11 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685] [36m  Disk Storage (0.1ms) [0m[31mDeleted file from key: 1cdm6yrlnwzdbh3w3ssd1zwmnds2[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [f4359f8a-72ff-4c67-8ecb-46446fafd685] Performed ActiveStorage::PurgeJob (Job ID: f4359f8a-72ff-4c67-8ecb-46446fafd685) from Async(default) in 6.97ms
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x000000012729fa68 @tempfile=#<Tempfile:/var/folders/qv/v7q6cymd1x328y94rwfjm_w00000gq/T/RackMultipart20250619-21119-h2ults.exe>, @content_type="application/octet-stream", @original_filename="test20250619-23195-yrhh8c.exe", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"test20250619-23195-yrhh8c.exe\"\r\nContent-Type: application/octet-stream\r\n">}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='create',application='Filenest',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Marcel detected MIME type: application/x-msdownload for file: test20250619-23195-yrhh8c.exe
+Final MIME type used: application/x-msdownload
+Completed 422 Unprocessable Content in 2ms (Views: 0.1ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by FilesController#index as */*
+Filter chain halted as :authorize_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/auth/register" for ::1 at 2025-06-19 11:39:33 +0100
+Processing by AuthController#register as */*
+  Parameters: {"name"=>"Other User 1750329573", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"name"=>"Other User 1750329573", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: register, request: #<ActionDispatch::Request:0x00000001278d7278>, params: {"name"=>"Other User 1750329573", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"register", "auth"=>{"name"=>"Other User 1750329573", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('other1750329573@example.com') LIMIT 1 /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Create (0.1ms)[0m  [1m[32mINSERT INTO "users" ("email", "password_digest", "name", "created_at", "updated_at") VALUES ('other1750329573@example.com', '$2a$12$Iql6DO4GYH9UHsflJt0KmO8BRv.3pxfpHsudpok9rv3C9Je4Ix3Oi', 'Other User 1750329573', '2025-06-19 10:39:34.076584', '2025-06-19 10:39:34.076584') RETURNING "id" /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+Completed 201 Created in 282ms (Views: 0.1ms | ActiveRecord: 0.7ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/files/8" for ::1 at 2025-06-19 11:39:34 +0100
+Processing by FilesController#show as */*
+  Parameters: {"id"=>"8"}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 6 LIMIT 1 /*action='show',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 8 LIMIT 1 /*action='show',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:82:in `set_user_file'
+Completed 403 Forbidden in 1ms (Views: 0.0ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started DELETE "/files/8" for ::1 at 2025-06-19 11:39:34 +0100
+Processing by FilesController#destroy as */*
+  Parameters: {"id"=>"8"}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 8 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:82:in `set_user_file'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 8 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_attachments" WHERE "active_storage_attachments"."id" = 8 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mUserFile Destroy (0.0ms)[0m  [1m[31mDELETE FROM "user_files" WHERE "user_files"."id" = 8 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 8 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+[ActiveJob] Enqueued ActiveStorage::PurgeJob (Job ID: ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d) to Async(default) with arguments: #<GlobalID:0x0000000127a744a0 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/8>>
+[ActiveJob] ↳ app/controllers/files_controller.rb:69:in `destroy'
+Completed 200 OK in 4ms (Views: 0.0ms | ActiveRecord: 0.6ms (6 queries, 0 cached) | GC: 0.0ms)
+
+
+Started DELETE "/files/9" for ::1 at 2025-06-19 11:39:34 +0100
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 8 LIMIT 1 /*application='Filenest'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d] Performing ActiveStorage::PurgeJob (Job ID: ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d) from Async(default) enqueued at 2025-06-19T10:39:34.093785000Z with arguments: #<GlobalID:0x000000012787b388 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/8>>
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d]   [1m[36mActiveStorage::Attachment Exists? (2.3ms)[0m  [1m[34mSELECT 1 AS one FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 8 LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d]   [1m[36mActiveStorage::VariantRecord Load (0.0ms)[0m  [1m[34mSELECT "active_storage_variant_records".* FROM "active_storage_variant_records" WHERE "active_storage_variant_records"."blob_id" = 8 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d]   [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 8 AND "active_storage_attachments"."record_type" = 'ActiveStorage::Blob' AND "active_storage_attachments"."name" = 'preview_image' LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d]   [1m[36mActiveStorage::Blob Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 8 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d] [36m  Disk Storage (0.1ms) [0m[31mDeleted file from key: bok8lhvsmw9r2et46160c2y3c272[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d] Performed ActiveStorage::PurgeJob (Job ID: ec5ac4ad-b0c6-4bcb-b204-2d0dd2e77a6d) from Async(default) in 6.49ms
+Processing by FilesController#destroy as */*
+  Parameters: {"id"=>"9"}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 9 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:82:in `set_user_file'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 9 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_attachments" WHERE "active_storage_attachments"."id" = 9 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mUserFile Destroy (0.0ms)[0m  [1m[31mDELETE FROM "user_files" WHERE "user_files"."id" = 9 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 9 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+[ActiveJob] Enqueued ActiveStorage::PurgeJob (Job ID: ffd48147-e330-4a94-a155-26714f98e2ba) to Async(default) with arguments: #<GlobalID:0x00000001255789d0 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/9>>
+[ActiveJob] ↳ app/controllers/files_controller.rb:69:in `destroy'
+Completed 200 OK in 4ms (Views: 0.0ms | ActiveRecord: 0.6ms (6 queries, 0 cached) | GC: 0.4ms)
+
+
+Started DELETE "/files/10" for ::1 at 2025-06-19 11:39:34 +0100
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 9 LIMIT 1 /*application='Filenest'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba] Performing ActiveStorage::PurgeJob (Job ID: ffd48147-e330-4a94-a155-26714f98e2ba) from Async(default) enqueued at 2025-06-19T10:39:34.110403000Z with arguments: #<GlobalID:0x00000001270dbd58 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/9>>
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba]   [1m[36mActiveStorage::Attachment Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 9 LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba]   [1m[36mActiveStorage::VariantRecord Load (0.0ms)[0m  [1m[34mSELECT "active_storage_variant_records".* FROM "active_storage_variant_records" WHERE "active_storage_variant_records"."blob_id" = 9 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba]   [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 9 AND "active_storage_attachments"."record_type" = 'ActiveStorage::Blob' AND "active_storage_attachments"."name" = 'preview_image' LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba]   [1m[36mActiveStorage::Blob Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 9 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba] [36m  Disk Storage (0.1ms) [0m[31mDeleted file from key: lk74d69ijm80vio79f6y5fo1p3v7[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba] [36m  Disk Storage (0.0ms) [0m[31mDeleted files by key prefix: variants/lk74d69ijm80vio79f6y5fo1p3v7/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [ffd48147-e330-4a94-a155-26714f98e2ba] Performed ActiveStorage::PurgeJob (Job ID: ffd48147-e330-4a94-a155-26714f98e2ba) from Async(default) in 4.97ms
+Processing by FilesController#destroy as */*
+  Parameters: {"id"=>"10"}
+  [1m[36mUser Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 5 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.0ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."id" = 10 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:82:in `set_user_file'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Load (0.4ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 10 AND "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Attachment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_attachments" WHERE "active_storage_attachments"."id" = 10 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mUserFile Destroy (0.0ms)[0m  [1m[31mDELETE FROM "user_files" WHERE "user_files"."id" = 10 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+  [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 10 LIMIT 1 /*action='destroy',application='Filenest',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:69:in `destroy'
+[ActiveJob] Enqueued ActiveStorage::PurgeJob (Job ID: a9c01719-12c4-4bdb-84e6-6f40de4d3602) to Async(default) with arguments: #<GlobalID:0x00000001278f9aa8 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/10>>
+[ActiveJob] ↳ app/controllers/files_controller.rb:69:in `destroy'
+Completed 200 OK in 4ms (Views: 0.0ms | ActiveRecord: 0.5ms (6 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602]   [1m[36mActiveStorage::Blob Load (0.0ms)[0m  [1m[34mSELECT "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 10 LIMIT 1 /*application='Filenest'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602] Performing ActiveStorage::PurgeJob (Job ID: a9c01719-12c4-4bdb-84e6-6f40de4d3602) from Async(default) enqueued at 2025-06-19T10:39:34.124297000Z with arguments: #<GlobalID:0x0000000124e7e148 @uri=#<URI::GID gid://filenest/ActiveStorage::Blob/10>>
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602]   [1m[36mActiveStorage::Attachment Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "active_storage_attachments" WHERE "active_storage_attachments"."blob_id" = 10 LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602]   [1m[36mActiveStorage::VariantRecord Load (0.0ms)[0m  [1m[34mSELECT "active_storage_variant_records".* FROM "active_storage_variant_records" WHERE "active_storage_variant_records"."blob_id" = 10 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602]   [1m[36mActiveStorage::Attachment Load (0.0ms)[0m  [1m[34mSELECT "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = 10 AND "active_storage_attachments"."record_type" = 'ActiveStorage::Blob' AND "active_storage_attachments"."name" = 'preview_image' LIMIT 1 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602]   [1m[36mActiveStorage::Blob Destroy (0.0ms)[0m  [1m[31mDELETE FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = 10 /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602]   [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Filenest',job='ActiveStorage%3A%3APurgeJob'*/[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602] [36m  Disk Storage (0.2ms) [0m[31mDeleted file from key: tn91xxo7rkxoft54atua6aoh2hw8[0m
+[ActiveJob] [ActiveStorage::PurgeJob] [a9c01719-12c4-4bdb-84e6-6f40de4d3602] Performed ActiveStorage::PurgeJob (Job ID: a9c01719-12c4-4bdb-84e6-6f40de4d3602) from Async(default) in 5.78ms
+Started POST "/auth/register" for ::1 at 2025-06-19 11:43:13 +0100
+Processing by AuthController#register as */*
+  Parameters: {"name"=>"UI Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"name"=>"UI Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: register, request: #<ActionDispatch::Request:0x00000001275bc958>, params: {"name"=>"UI Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"register", "auth"=>{"name"=>"UI Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('uitest@example.com') LIMIT 1 /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Create (0.1ms)[0m  [1m[32mINSERT INTO "users" ("email", "password_digest", "name", "created_at", "updated_at") VALUES ('uitest@example.com', '$2a$12$UHzhLtbOpt/GVa94ZY6ZmObzKM.2n5vMKm2uARozpfhYGyi1vogoy', 'UI Test User', '2025-06-19 10:43:14.199511', '2025-06-19 10:43:14.199511') RETURNING "id" /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+Completed 201 Created in 282ms (Views: 0.1ms | ActiveRecord: 0.9ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/auth/register" for ::1 at 2025-06-19 11:47:09 +0100
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Filenest'*/[0m
+Processing by AuthController#register as */*
+  Parameters: {"name"=>"Tab Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "auth"=>{"name"=>"Tab Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: register, request: #<ActionDispatch::Request:0x000000011ff3a1e0>, params: {"name"=>"Tab Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "controller"=>"auth", "action"=>"register", "auth"=>{"name"=>"Tab Test User", "email"=>"[FILTERED]", "password"=>"[FILTERED]"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('tabtest@example.com') LIMIT 1 /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Create (0.1ms)[0m  [1m[32mINSERT INTO "users" ("email", "password_digest", "name", "created_at", "updated_at") VALUES ('tabtest@example.com', '$2a$12$1DoBY0hKW0C8zfCg.yCkBOdi9ewkxmTTGL7woLPbiiZVFs93KIivi', 'Tab Test User', '2025-06-19 10:47:10.148914', '2025-06-19 10:47:10.148914') RETURNING "id" /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='register',application='Filenest',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+Completed 201 Created in 297ms (Views: 0.2ms | ActiveRecord: 2.7ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
