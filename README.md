@@ -9,7 +9,8 @@ A secure, lightweight file upload service with **sexy anti-virus protection** an
 git clone <repo-url>
 cd eng_day_FileNest
 
-# Start the sexy anti-virus scanner
+# OPTIONAL: Start the sexy anti-virus scanner
+# The app will run without Docker. Just not the anti-virus
 docker-compose up -d clamav
 
 # Setup Rails
@@ -20,7 +21,7 @@ bin/rails server
 
 Visit `http://localhost:3000` and start uploading! 🎉
 
-### Option 2: Skip Virus Scanning (Development)
+### OPTIONAL - Option 2: Skip Virus Scanning (Development)
 ```bash
 SKIP_VIRUS_SCAN=true bin/rails server
 ```
