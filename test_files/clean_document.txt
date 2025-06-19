@@ -1,0 +1,22 @@
+This is a clean text document for testing virus scanning functionality.
+
+This file contains no malicious content and should pass all virus scans successfully.
+
+Content includes:
+- Plain text
+- No executable code
+- No suspicious patterns
+- Safe for upload testing
+
+Test metadata:
+- Created: 2025-01-27
+- Purpose: Virus scanning workflow validation
+- Expected result: PASS (clean scan)
+- File type: text/plain
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+This document should be successfully uploaded and stored after passing the
+ClamAV virus scan.

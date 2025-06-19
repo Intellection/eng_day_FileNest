@@ -59,7 +59,7 @@ def upload_file(token, filename, content)
     response = http.request(request)
     {
       code: response.code,
-      body: JSON.parse(response.body) rescue response.body
+      body: (JSON.parse(response.body) rescue response.body)
     }
   end
 end
