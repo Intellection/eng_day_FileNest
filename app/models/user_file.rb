@@ -19,6 +19,17 @@ class UserFile < ApplicationRecord
     "application/csv"
   ].freeze
 
+  ALLOWED_FILE_EXTENSIONS = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".svg",
+    ".txt",
+    ".md",
+    ".csv"
+  ].freeze
+
   validates :content_type, inclusion: {
     in: ALLOWED_CONTENT_TYPES,
     message: "is not supported. Allowed types: #{ALLOWED_CONTENT_TYPES.join(", ")}"

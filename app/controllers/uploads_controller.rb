@@ -26,6 +26,18 @@ class UploadsController < ApplicationController
       }, status: :unprocessable_entity
     end
 
+    # Additional validation for octet-stream files
+    if content_type == "application/octet-stream"
+      extension = File.extname(file.original_filename).downcase
+      unless UserFile::ALLOWED_FILE_EXTENSIONS.include?(extension)
+        return render json: {
+          message: "File extension not supported",
+          allowed_extensions: UserFile::ALLOWED_FILE_EXTENSIONS,
+          detected_extension: extension
+        }, status: :unprocessable_entity
+      end
+    end
+
     # Perform virus scan
     virus_scan_result = perform_virus_scan(file)
     unless virus_scan_result[:safe]
