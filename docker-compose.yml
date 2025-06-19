@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=sqlite3:db/development.sqlite3
+      - CLAMAV_HOST=clamav
+      - CLAMAV_PORT=3310
+    volumes:
+      - .:/app
+      - ./storage:/app/storage
+    depends_on:
+      - clamav
+    networks:
+      - snapvault_network
+
+  clamav:
+    image: clamav/clamav:latest
+    ports:
+      - "3310:3310"
+    environment:
+      - CLAMAV_NO_FRESHCLAM=false
+      - FRESHCLAM_CHECKS=24
+      - CLAMD_STARTUP_TIMEOUT=300
+    volumes:
+      - clamav_data:/var/lib/clamav
+      - clamav_logs:/var/log/clamav
+    healthcheck:
+      test: ["CMD", "clamdscan", "--ping", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    networks:
+      - snapvault_network
+    restart: unless-stopped
+
+  # Optional: ClamAV Freshclam for automatic virus definition updates
+  freshclam:
+    image: clamav/clamav:latest
+    command: freshclam -d --foreground
+    volumes:
+      - clamav_data:/var/lib/clamav
+      - clamav_logs:/var/log/clamav
+    depends_on:
+      - clamav
+    networks:
+      - snapvault_network
+    restart: unless-stopped
+
+volumes:
+  clamav_data:
+    driver: local
+  clamav_logs:
+    driver: local
+
+networks:
+  snapvault_network:
+    driver: bridge

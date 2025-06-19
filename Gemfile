@@ -38,6 +38,7 @@ gem "rack-cors"
 # SnapVault specific gems
 gem "jwt"
 gem "marcel"
+gem "clamav", "~> 0.105"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
