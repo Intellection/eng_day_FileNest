@@ -16,13 +16,43 @@ class UploadsController < ApplicationController
     end
 
     # Detect content type
-    content_type = Marcel::MimeType.for(file.tempfile)
+    detected_content_type = Marcel::MimeType.for(file.tempfile)
+    Rails.logger.info "Marcel detected MIME type: #{detected_content_type} for file: #{file.original_filename}"
 
-    # Validate content type
+    # Fallback MIME type detection based on file extension
+    if detected_content_type.nil? || detected_content_type == "application/octet-stream"
+      extension = File.extname(file.original_filename).downcase
+      content_type = case extension
+      when '.txt'
+        'text/plain'
+      when '.md', '.markdown'
+        'text/markdown'
+      when '.csv'
+        'text/csv'
+      when '.jpg', '.jpeg'
+        'image/jpeg'
+      when '.png'
+        'image/png'
+      when '.gif'
+        'image/gif'
+      when '.svg'
+        'image/svg+xml'
+      else
+        detected_content_type
+      end
+      Rails.logger.info "Using fallback MIME type: #{content_type} for extension: #{extension}"
+    else
+      content_type = detected_content_type
+    end
+
+    Rails.logger.info "Final MIME type used: #{content_type}"
+
+    # Validate content type and file extension
     unless UserFile::ALLOWED_CONTENT_TYPES.include?(content_type)
       return render json: {
         message: Message.invalid_file_type,
-        allowed_types: UserFile::ALLOWED_CONTENT_TYPES
+        allowed_types: UserFile::ALLOWED_CONTENT_TYPES.reject { |t| t == 'application/octet-stream' },
+        detected_type: content_type
       }, status: :unprocessable_entity
     end
 
