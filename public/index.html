@@ -1133,6 +1133,171 @@
                 text-align: center;
             }
 
+            /* Preview Modal */
+            .preview-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                backdrop-filter: blur(5px);
+                animation: fadeIn var(--transition-standard) ease-out;
+            }
+
+            .preview-modal.active {
+                display: flex;
+            }
+
+            .preview-content {
+                position: relative;
+                max-width: 90%;
+                max-height: 90%;
+                background: var(--surface-color);
+                border-radius: var(--border-radius-large);
+                box-shadow: var(--elevation-16);
+                overflow: hidden;
+                animation: scaleIn var(--transition-standard) ease-out;
+            }
+
+            @keyframes scaleIn {
+                from {
+                    transform: scale(0.8);
+                    opacity: 0;
+                }
+                to {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+
+            .preview-header {
+                padding: 1rem 1.5rem;
+                background: var(--primary-color);
+                color: var(--on-primary);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .preview-title {
+                font-size: 1.125rem;
+                font-weight: 500;
+                margin: 0;
+                word-break: break-word;
+            }
+
+            .preview-close {
+                background: none;
+                border: none;
+                color: var(--on-primary);
+                font-size: 1.5rem;
+                cursor: pointer;
+                padding: 0.25rem;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color var(--transition-fast);
+            }
+
+            .preview-close:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .preview-body {
+                padding: 0;
+                max-width: 90vw;
+                max-height: 80vh;
+                overflow: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .preview-image {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                display: block;
+            }
+
+            .preview-text {
+                padding: 2rem;
+                font-family: "Courier New", monospace;
+                font-size: 0.875rem;
+                line-height: 1.6;
+                color: var(--gray-800);
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                max-width: 800px;
+                max-height: 70vh;
+                overflow: auto;
+            }
+
+            .preview-error {
+                padding: 2rem;
+                text-align: center;
+                color: var(--error-color);
+            }
+
+            .preview-loading {
+                padding: 3rem;
+                text-align: center;
+                color: var(--gray-600);
+            }
+
+            .preview-loading .spinner {
+                margin: 0 auto 1rem;
+            }
+
+            /* Rename functionality */
+            .file-name-editable {
+                background: transparent;
+                border: none;
+                font-size: inherit;
+                font-weight: inherit;
+                color: inherit;
+                width: 100%;
+                padding: 2px 4px;
+                border-radius: var(--border-radius);
+                transition: all var(--transition-fast);
+                outline: none;
+            }
+
+            .file-name-editable:focus {
+                background: var(--gray-100);
+                border: 2px solid var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            }
+
+            .file-name-editable:hover {
+                background: var(--gray-50);
+            }
+
+            .rename-controls {
+                display: none;
+                gap: 0.25rem;
+                margin-top: 0.5rem;
+                justify-content: flex-start;
+            }
+
+            .rename-controls.active {
+                display: flex;
+            }
+
+            .rename-controls .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+                min-width: auto;
+            }
+
             /* Responsive Design */
             @media (max-width: 768px) {
                 .container {
@@ -1540,6 +1705,26 @@
         >
             <span class="material-icons">add</span>
         </button>
+
+        <!-- Preview Modal -->
+        <div class="preview-modal" id="previewModal">
+            <div class="preview-content">
+                <div class="preview-header">
+                    <h3 class="preview-title" id="previewTitle">
+                        File Preview
+                    </h3>
+                    <button
+                        class="preview-close"
+                        onclick="fileNest.closePreview()"
+                    >
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="preview-body" id="previewBody">
+                    <!-- Preview content will be loaded here -->
+                </div>
+            </div>
+        </div>
 
         <!-- Alerts Container -->
         <div class="alerts-container" id="alertsContainer"></div>
@@ -2047,7 +2232,25 @@
                             </div>
                             <div class="file-details">
                                 <h3 title="${this.escapeHtml(file.filename)}">
-                                    ${this.escapeHtml(file.filename)}
+                                    <input
+                                        type="text"
+                                        class="file-name-editable"
+                                        value="${this.escapeHtml(file.filename)}"
+                                        data-file-id="${file.id}"
+                                        data-original-name="${this.escapeHtml(file.filename)}"
+                                        readonly
+                                        onclick="this.readOnly = false; this.select(); fileNest.showRenameControls(${file.id});"
+                                        onblur="fileNest.handleRenameBlur(this)"
+                                        onkeydown="fileNest.handleRenameKeydown(event, this)"
+                                    />
+                                    <div class="rename-controls" id="renameControls${file.id}">
+                                        <button class="btn btn-small" onclick="fileNest.saveRename(${file.id})">
+                                            <span class="material-icons">check</span>
+                                        </button>
+                                        <button class="btn btn-small btn-secondary" onclick="fileNest.cancelRename(${file.id})">
+                                            <span class="material-icons">close</span>
+                                        </button>
+                                    </div>
                                 </h3>
                                 <div class="file-meta">
                                     <span>
@@ -2062,6 +2265,18 @@
                             </div>
                         </div>
                         <div class="file-actions">
+                            <button class="btn btn-small" onclick="fileNest.startRename(${file.id})">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            ${
+                                this.canPreviewFile(file)
+                                    ? `
+                            <button class="btn btn-small" onclick="fileNest.previewFile(${file.id}, '${this.escapeHtml(file.filename)}', '${file.content_type}')">
+                                <span class="material-icons">visibility</span>
+                            </button>
+                            `
+                                    : ""
+                            }
                             <button class="btn btn-small btn-secondary" onclick="fileNest.downloadFile(${file.id})">
                                 <span class="material-icons">download</span>
                             </button>
@@ -2124,6 +2339,306 @@
                     if (contentType.includes("markdown")) return "article";
                     if (contentType.includes("csv")) return "table_chart";
                     return "insert_drive_file";
+                }
+
+                canPreviewFile(file) {
+                    const previewableTypes = [
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/png",
+                        "image/gif",
+                        "image/svg+xml",
+                        "text/plain",
+                        "text/markdown",
+                        "text/csv",
+                    ];
+                    return previewableTypes.includes(file.content_type);
+                }
+
+                async previewFile(fileId, filename, contentType) {
+                    const modal = document.getElementById("previewModal");
+                    const title = document.getElementById("previewTitle");
+                    const body = document.getElementById("previewBody");
+
+                    // Show modal and loading state
+                    modal.classList.add("active");
+                    title.textContent = filename;
+                    body.innerHTML = `
+                        <div class="preview-loading">
+                            <div class="spinner"></div>
+                            <p>Loading preview...</p>
+                        </div>
+                    `;
+
+                    try {
+                        const response = await fetch(
+                            `${this.baseUrl}/files/${fileId}/download`,
+                            {
+                                method: "GET",
+                                headers: {
+                                    Authorization: `Bearer ${this.token}`,
+                                },
+                            },
+                        );
+
+                        if (!response.ok) {
+                            throw new Error("Failed to load file");
+                        }
+
+                        if (contentType.startsWith("image/")) {
+                            // For images, create blob URL and display
+                            const blob = await response.blob();
+                            const imageUrl = URL.createObjectURL(blob);
+
+                            body.innerHTML = `
+                                <img src="${imageUrl}" alt="${this.escapeHtml(filename)}" class="preview-image" onload="URL.revokeObjectURL(this.src)">
+                            `;
+                        } else if (contentType.startsWith("text/")) {
+                            // For text files, display content
+                            const text = await response.text();
+                            body.innerHTML = `
+                                <div class="preview-text">${this.escapeHtml(text)}</div>
+                            `;
+                        }
+                    } catch (error) {
+                        body.innerHTML = `
+                            <div class="preview-error">
+                                <span class="material-icons" style="font-size: 3rem; margin-bottom: 1rem; display: block;">error_outline</span>
+                                <h3>Preview not available</h3>
+                                <p>${error.message}</p>
+                            </div>
+                        `;
+                    }
+                }
+
+                closePreview() {
+                    const modal = document.getElementById("previewModal");
+                    modal.classList.remove("active");
+
+                    // Clean up any blob URLs to prevent memory leaks
+                    const images = modal.querySelectorAll("img");
+                    images.forEach((img) => {
+                        if (img.src.startsWith("blob:")) {
+                            URL.revokeObjectURL(img.src);
+                        }
+                    });
+                }
+
+                startRename(fileId) {
+                    const input = document.querySelector(
+                        `input[data-file-id="${fileId}"]`,
+                    );
+                    if (input) {
+                        input.readOnly = false;
+                        input.focus();
+                        input.select();
+                        this.showRenameControls(fileId);
+                    }
+                }
+
+                showRenameControls(fileId) {
+                    const controls = document.getElementById(
+                        `renameControls${fileId}`,
+                    );
+                    if (controls) {
+                        controls.classList.add("active");
+                    }
+                }
+
+                hideRenameControls(fileId) {
+                    const controls = document.getElementById(
+                        `renameControls${fileId}`,
+                    );
+                    if (controls) {
+                        controls.classList.remove("active");
+                    }
+                }
+
+                async handleRenameBlur(input) {
+                    // Don't auto-save on blur, just hide controls if unchanged
+                    const fileId = input.dataset.fileId;
+                    const originalName = input.dataset.originalName;
+                    const newName = input.value.trim();
+
+                    if (newName === originalName) {
+                        this.cancelRename(fileId);
+                    }
+                }
+
+                handleRenameKeydown(event, input) {
+                    const fileId = input.dataset.fileId;
+
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        this.saveRename(fileId);
+                    } else if (event.key === "Escape") {
+                        event.preventDefault();
+                        this.cancelRename(fileId);
+                    }
+                }
+
+                async saveRename(fileId) {
+                    const input = document.querySelector(
+                        `input[data-file-id="${fileId}"]`,
+                    );
+                    if (!input) return;
+
+                    const originalName = input.dataset.originalName;
+                    const newName = input.value.trim();
+
+                    if (newName === originalName || newName === "") {
+                        this.cancelRename(fileId);
+                        return;
+                    }
+
+                    // Validate filename
+                    if (!this.validateFileName(newName)) {
+                        this.cancelRename(fileId);
+                        return;
+                    }
+
+                    try {
+                        await this.renameFile(fileId, newName);
+                        input.dataset.originalName = newName;
+                        input.readOnly = true;
+                        this.hideRenameControls(fileId);
+                        this.showAlert(
+                            `✅ File renamed to "${newName}"`,
+                            "success",
+                        );
+                        // Refresh the file list to update all references
+                        this.loadFiles();
+                    } catch (error) {
+                        input.value = originalName;
+                        this.cancelRename(fileId);
+                        this.showAlert(
+                            `❌ Failed to rename file: ${error.message}`,
+                            "error",
+                        );
+                    }
+                }
+
+                cancelRename(fileId) {
+                    const input = document.querySelector(
+                        `input[data-file-id="${fileId}"]`,
+                    );
+                    if (input) {
+                        input.value = input.dataset.originalName;
+                        input.readOnly = true;
+                        this.hideRenameControls(fileId);
+                    }
+                }
+
+                validateFileName(filename) {
+                    // Check for empty filename
+                    if (!filename || filename.trim().length === 0) {
+                        this.showAlert("Filename cannot be empty", "error");
+                        return false;
+                    }
+
+                    // Check length
+                    if (filename.length > 255) {
+                        this.showAlert(
+                            "Filename too long (maximum 255 characters)",
+                            "error",
+                        );
+                        return false;
+                    }
+
+                    // Check for invalid characters
+                    const invalidChars = /[<>:"/\\|?*\x00-\x1f]/;
+                    if (invalidChars.test(filename)) {
+                        this.showAlert(
+                            "Filename contains invalid characters",
+                            "error",
+                        );
+                        return false;
+                    }
+
+                    // Check for reserved names (Windows)
+                    const reservedNames = [
+                        "CON",
+                        "PRN",
+                        "AUX",
+                        "NUL",
+                        "COM1",
+                        "COM2",
+                        "COM3",
+                        "COM4",
+                        "COM5",
+                        "COM6",
+                        "COM7",
+                        "COM8",
+                        "COM9",
+                        "LPT1",
+                        "LPT2",
+                        "LPT3",
+                        "LPT4",
+                        "LPT5",
+                        "LPT6",
+                        "LPT7",
+                        "LPT8",
+                        "LPT9",
+                    ];
+                    const baseName = filename.split(".")[0].toUpperCase();
+                    if (reservedNames.includes(baseName)) {
+                        this.showAlert(
+                            "Filename uses a reserved system name",
+                            "error",
+                        );
+                        return false;
+                    }
+
+                    // Check if filename starts or ends with dot or space
+                    if (
+                        filename.startsWith(".") ||
+                        filename.startsWith(" ") ||
+                        filename.endsWith(" ")
+                    ) {
+                        this.showAlert(
+                            "Filename cannot start or end with a dot or space",
+                            "error",
+                        );
+                        return false;
+                    }
+
+                    // Check for file extension
+                    const allowedExtensions = [
+                        ".jpg",
+                        ".jpeg",
+                        ".png",
+                        ".gif",
+                        ".svg",
+                        ".txt",
+                        ".md",
+                        ".markdown",
+                        ".csv",
+                    ];
+                    const extension = filename
+                        .substring(filename.lastIndexOf("."))
+                        .toLowerCase();
+                    if (!extension || !allowedExtensions.includes(extension)) {
+                        this.showAlert(
+                            `File must have a valid extension: ${allowedExtensions.join(", ")}`,
+                            "error",
+                        );
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                async renameFile(fileId, newFilename) {
+                    try {
+                        const response = await this.apiCall(
+                            `/files/${fileId}`,
+                            "PATCH",
+                            { file: { filename: newFilename } },
+                        );
+                        return response;
+                    } catch (error) {
+                        throw error;
+                    }
                 }
 
                 async downloadFile(fileId) {
@@ -2343,6 +2858,23 @@
             window.addEventListener("popstate", function () {
                 if (window.fileNest) {
                     window.fileNest.checkAuth();
+                }
+            });
+
+            // Close preview modal on escape key
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    const modal = document.getElementById("previewModal");
+                    if (modal && modal.classList.contains("active")) {
+                        window.fileNest.closePreview();
+                    }
+                }
+            });
+
+            // Close preview modal on backdrop click
+            document.addEventListener("click", function (e) {
+                if (e.target.id === "previewModal") {
+                    window.fileNest.closePreview();
                 }
             });
         </script>
