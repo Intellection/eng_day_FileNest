@@ -93,6 +93,7 @@
                 color: var(--on-surface);
                 line-height: 1.6;
                 overflow-x: hidden;
+                padding-top: 120px;
             }
 
             .background-decoration {
@@ -179,12 +180,73 @@
                 z-index: 1;
             }
 
+            .main-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 1rem;
+                position: relative;
+                z-index: 1;
+                margin-top: 2rem;
+            }
+
             .header {
-                text-align: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
                 color: var(--on-primary);
-                margin-bottom: 2rem;
-                padding: 3rem 0;
+                padding: 1rem 0;
+                background: rgba(102, 126, 234, 0.95);
+                backdrop-filter: blur(20px) saturate(180%);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+                z-index: 1000;
                 animation: slideInDown var(--transition-slow) ease-out;
+                transition: all var(--transition-standard);
+            }
+
+            .header-content {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                position: relative;
+            }
+
+            .header-user-info {
+                position: absolute;
+                right: 0;
+                display: flex;
+                align-items: center;
+                color: var(--on-primary);
+                font-weight: 500;
+                opacity: 0;
+                transform: translateX(20px);
+                transition: all var(--transition-standard);
+            }
+
+            .header-user-info.show {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            #headerText {
+                opacity: 1;
+                transition: all var(--transition-standard);
+            }
+
+            #headerText.hide {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            .header:hover {
+                background: rgba(102, 126, 234, 0.98);
+                transform: translateY(-1px);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
             }
 
             .header h1 {
@@ -198,6 +260,11 @@
             .header .logo-icon {
                 width: 80px;
                 height: 80px;
+                border-radius: 50%;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+                border: 4px solid rgba(255, 255, 255, 0.8);
+                transition: all var(--transition-standard);
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
                 margin-bottom: 1rem;
                 display: inline-block;
                 animation: bounce 2s infinite;
@@ -1330,16 +1397,38 @@
 
             /* Responsive Design */
             @media (max-width: 768px) {
-                .container {
-                    padding: 0.5rem;
+                .container,
+                .main-container {
+                    padding: 1rem;
                 }
 
-                .header h1 {
-                    font-size: 2.5rem;
+                .header {
+                    padding: 0.75rem 0;
+                }
+
+                .header-content {
+                    padding: 0 0.5rem;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                }
+
+                .header-user-info {
+                    position: static;
+                    margin-top: 0.5rem;
+                }
+
+                .header .logo-icon {
+                    width: 50px;
+                    height: 50px;
                 }
 
                 .header p {
-                    font-size: 1rem;
+                    font-size: 0.9rem;
+                    margin: 0.5rem 0 0 0;
+                }
+
+                body {
+                    padding-top: 120px;
                 }
 
                 .auth-section,
@@ -1379,31 +1468,54 @@
             @media (max-width: 480px) {
                 .auth-tabs {
                     flex-direction: column;
-                    gap: 4px;
+                    gap: 0.5rem;
                 }
 
                 .auth-tab {
-                    padding: 0.75rem;
+                    width: 100%;
                 }
 
                 .file-info {
                     flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                    gap: 0.75rem;
+                    align-items: flex-start;
+                    gap: 0.5rem;
                 }
 
                 .file-icon {
-                    margin-bottom: 0;
+                    margin-right: 0;
+                }
+
+                .header {
+                    padding: 0.5rem 0;
+                }
+
+                .header-content {
+                    padding: 0 0.5rem;
+                }
+
+                .header-user-info {
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.25rem;
+                }
+
+                .header-user-info .btn {
+                    font-size: 0.75rem;
+                    padding: 0.25rem 0.5rem;
+                    margin-left: 0 !important;
                 }
 
                 .header .logo-icon {
-                    width: 60px;
-                    height: 60px;
+                    width: 40px;
+                    height: 40px;
                 }
 
-                .header h1 {
-                    font-size: 2rem;
+                .header p {
+                    font-size: 0.8rem;
+                }
+
+                body {
+                    padding-top: 100px;
                 }
 
                 .stats-grid {
@@ -1422,17 +1534,38 @@
             </div>
         </div>
 
-        <div class="container">
-            <div class="header">
+        <div class="header" id="mainHeader">
+            <div class="header-content">
                 <img
                     src="FileNest_Logo.png"
                     alt="FileNest Logo"
                     class="logo-icon"
                 />
-                <h1>FileNest</h1>
-                <p>Your Personal File Cache - Secure, Simple, Fast</p>
+                <p id="headerText">
+                    Your Personal File Cache - Secure, Simple, Fast
+                </p>
+                <div
+                    class="header-user-info"
+                    id="headerUserInfo"
+                    style="display: none"
+                >
+                    <button
+                        class="btn btn-small btn-secondary"
+                        id="headerLogoutBtn"
+                        style="margin-left: 1rem"
+                    >
+                        <span
+                            class="material-icons"
+                            style="margin-right: 0.25rem; font-size: 1rem"
+                            >logout</span
+                        >
+                        Logout
+                    </button>
+                </div>
             </div>
+        </div>
 
+        <div class="main-container">
             <div class="main-content">
                 <!-- Authentication Section -->
                 <div class="auth-section" id="authSection">
@@ -1776,6 +1909,7 @@
                     this.bindEvents();
                     this.checkAuth();
                     this.addRippleEffect();
+                    this.addScrollEffect();
                 }
 
                 addRippleEffect() {
@@ -1817,44 +1951,62 @@
                     });
 
                     // Auth forms
-                    document
-                        .getElementById("loginFormElement")
-                        .addEventListener("submit", (e) => this.handleLogin(e));
-                    document
-                        .getElementById("registerFormElement")
-                        .addEventListener("submit", (e) =>
+                    const loginForm =
+                        document.getElementById("loginFormElement");
+                    const registerForm = document.getElementById(
+                        "registerFormElement",
+                    );
+                    const logoutBtn = document.getElementById("logoutBtn");
+
+                    if (loginForm) {
+                        loginForm.addEventListener("submit", (e) =>
+                            this.handleLogin(e),
+                        );
+                    }
+                    if (registerForm) {
+                        registerForm.addEventListener("submit", (e) =>
                             this.handleRegister(e),
                         );
-                    document
-                        .getElementById("logoutBtn")
-                        .addEventListener("click", () => this.logout());
+                    }
+                    if (logoutBtn) {
+                        logoutBtn.addEventListener("click", () =>
+                            this.logout(),
+                        );
+                    }
 
                     // File upload
                     const uploadArea = document.getElementById("uploadArea");
                     const fileInput = document.getElementById("fileInput");
 
-                    uploadArea.addEventListener(
-                        "dragover",
-                        this.handleDragOver.bind(this),
-                    );
-                    uploadArea.addEventListener(
-                        "dragleave",
-                        this.handleDragLeave.bind(this),
-                    );
-                    uploadArea.addEventListener("drop", (e) =>
-                        this.handleDrop(e),
-                    );
-                    fileInput.addEventListener("change", (e) =>
-                        this.handleFileSelect(e),
-                    );
+                    if (uploadArea) {
+                        uploadArea.addEventListener(
+                            "dragover",
+                            this.handleDragOver.bind(this),
+                        );
+                        uploadArea.addEventListener(
+                            "dragleave",
+                            this.handleDragLeave.bind(this),
+                        );
+                        uploadArea.addEventListener("drop", (e) =>
+                            this.handleDrop(e),
+                        );
+                    }
+                    if (fileInput) {
+                        fileInput.addEventListener("change", (e) =>
+                            this.handleFileSelect(e),
+                        );
+                    }
 
                     // Password confirmation validation
-                    document
-                        .getElementById("registerPasswordConfirm")
-                        .addEventListener(
+                    const passwordConfirm = document.getElementById(
+                        "registerPasswordConfirm",
+                    );
+                    if (passwordConfirm) {
+                        passwordConfirm.addEventListener(
                             "input",
                             this.validatePasswordMatch.bind(this),
                         );
+                    }
                 }
 
                 switchAuthTab(tab) {
@@ -1898,8 +2050,10 @@
                     if (this.token && this.user) {
                         this.showApp();
                         this.loadFiles();
+                        this.updateHeader(true);
                     } else {
                         this.showAuth();
+                        this.updateHeader(false);
                     }
                 }
 
@@ -1927,6 +2081,9 @@
                         element.style.transform =
                             "translateY(30px) rotate(-90deg) scale(0.9)";
                     });
+
+                    // Update header for logged out state
+                    this.updateHeader(false);
                 }
 
                 showApp() {
@@ -1954,6 +2111,49 @@
                     childElements.forEach((element, index) => {
                         element.style.animation = `fadeInSpinChild 0.6s ease-out ${index * 0.1}s both`;
                     });
+
+                    // Update header for logged in state
+                    this.updateHeader(true);
+                }
+
+                updateHeader(isLoggedIn) {
+                    const headerText = document.getElementById("headerText");
+                    const headerUserInfo =
+                        document.getElementById("headerUserInfo");
+                    const headerUserName =
+                        document.getElementById("headerUserName");
+                    const headerLogoutBtn =
+                        document.getElementById("headerLogoutBtn");
+
+                    if (isLoggedIn && this.user) {
+                        // Hide text with animation
+                        headerText.classList.add("hide");
+
+                        // Show user info after text fade out
+                        setTimeout(() => {
+                            headerText.style.display = "none";
+                            headerUserInfo.style.display = "flex";
+                            headerUserName.textContent = `Welcome, ${this.user.name}!`;
+
+                            // Trigger show animation
+                            setTimeout(() => {
+                                headerUserInfo.classList.add("show");
+                            }, 50);
+                        }, 300);
+
+                        // Add logout functionality to header button
+                        headerLogoutBtn.onclick = () => this.logout();
+                    } else {
+                        // Hide user info with animation
+                        headerUserInfo.classList.remove("show");
+
+                        // Show text after user info fade out
+                        setTimeout(() => {
+                            headerUserInfo.style.display = "none";
+                            headerText.style.display = "block";
+                            headerText.classList.remove("hide");
+                        }, 300);
+                    }
                 }
 
                 async handleLogin(e) {
@@ -2858,6 +3058,34 @@
                             btnText.textContent = "Create Account";
                         }
                     }
+                }
+
+                addScrollEffect() {
+                    const header = document.getElementById("mainHeader");
+                    if (!header) return;
+
+                    let lastScrollY = window.scrollY;
+
+                    window.addEventListener("scroll", () => {
+                        const currentScrollY = window.scrollY;
+
+                        if (
+                            currentScrollY > lastScrollY &&
+                            currentScrollY > 100
+                        ) {
+                            // Scrolling down - slightly reduce opacity
+                            header.style.background =
+                                "rgba(102, 126, 234, 0.85)";
+                            header.style.transform = "translateY(-2px)";
+                        } else {
+                            // Scrolling up or at top - restore opacity
+                            header.style.background =
+                                "rgba(102, 126, 234, 0.95)";
+                            header.style.transform = "translateY(0)";
+                        }
+
+                        lastScrollY = currentScrollY;
+                    });
                 }
 
                 escapeHtml(text) {
