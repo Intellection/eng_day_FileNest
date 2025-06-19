@@ -392,3 +392,153 @@ Processing by FilesController#index as */*
 Completed 200 OK in 6ms (Views: 0.1ms | ActiveRecord: 0.4ms (7 queries, 1 cached) | GC: 0.6ms)
 
 
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Snapvault'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Snapvault'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Snapvault'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Snapvault'*/[0m
+Started POST "/auth/register" for ::1 at 2025-06-19 11:21:02 +0100
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Snapvault'*/[0m
+Processing by AuthController#register as */*
+  Parameters: {"name"=>"Brook", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "auth"=>{"name"=>"Brook", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}}
+[31mUnpermitted parameter: :auth. Context: { controller: AuthController, action: register, request: #<ActionDispatch::Request:0x00000001255acaa0>, params: {"name"=>"Brook", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "controller"=>"auth", "action"=>"register", "auth"=>{"name"=>"Brook", "email"=>"[FILTERED]", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='register',application='Snapvault',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('bb.brook96@hotmail.com') LIMIT 1 /*action='register',application='Snapvault',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("email", "password_digest", "name", "created_at", "updated_at") VALUES ('bb.brook96@hotmail.com', '$2a$12$TeWi6qvVP.LcdZN9tS5gUue/EehPa1ZuK1MnnER/QQZ9y1yEwR3DK', 'Brook', '2025-06-19 10:21:02.993846', '2025-06-19 10:21:02.993846') RETURNING "id" /*action='register',application='Snapvault',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='register',application='Snapvault',controller='auth'*/[0m
+  ↳ app/controllers/auth_controller.rb:26:in `register'
+Completed 201 Created in 473ms (Views: 0.6ms | ActiveRecord: 5.8ms (2 queries, 0 cached) | GC: 110.5ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:21:03 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.1ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 3 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.4ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.0ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 214ms (Views: 0.3ms | ActiveRecord: 2.4ms (5 queries, 1 cached) | GC: 38.3ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:22:23 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x00000001257eb370 @tempfile=#<Tempfile:/var/folders/_n/4bpq80q94jj0t8ykyyh21gr00000gn/T/RackMultipart20250619-20890-ct06e3.pdf>, @content_type="application/pdf", @original_filename="51e6b519-e353-41c6-ae23-ce2bbb85ad94_Coding_Agents_at_Zappi.pdf", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"51e6b519-e353-41c6-ae23-ce2bbb85ad94_Coding_Agents_at_Zappi.pdf\"\r\nContent-Type: application/pdf\r\n">}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='create',application='Snapvault',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Completed 422 Unprocessable Content in 6ms (Views: 0.3ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 1.2ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:22:23 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.9ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 3 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.3ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.1ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 23ms (Views: 0.2ms | ActiveRecord: 1.9ms (5 queries, 1 cached) | GC: 0.0ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:24:24 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x0000000125460750 @tempfile=#<Tempfile:/var/folders/_n/4bpq80q94jj0t8ykyyh21gr00000gn/T/RackMultipart20250619-20890-re6zl2.txt>, @content_type="text/plain", @original_filename="clean_test.txt", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"clean_test.txt\"\r\nContent-Type: text/plain\r\n">}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='create',application='Snapvault',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Completed 422 Unprocessable Content in 8ms (Views: 0.2ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:24:24 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.3ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 3 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.1ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.0ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 10ms (Views: 0.1ms | ActiveRecord: 0.7ms (5 queries, 1 cached) | GC: 0.0ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:24:41 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x00000001256e1380 @tempfile=#<Tempfile:/var/folders/_n/4bpq80q94jj0t8ykyyh21gr00000gn/T/RackMultipart20250619-20890-d25422.txt>, @content_type="text/plain", @original_filename="clean_test.txt", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"clean_test.txt\"\r\nContent-Type: text/plain\r\n">}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='create',application='Snapvault',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Completed 422 Unprocessable Content in 7ms (Views: 0.2ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:24:41 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.2ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 3 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.3ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.1ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 11ms (Views: 0.2ms | ActiveRecord: 0.9ms (5 queries, 1 cached) | GC: 0.0ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:25:08 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x000000012471cd50 @tempfile=#<Tempfile:/var/folders/_n/4bpq80q94jj0t8ykyyh21gr00000gn/T/RackMultipart20250619-20890-k6xslk.txt>, @content_type="text/plain", @original_filename="clean_test.txt", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"clean_test.txt\"\r\nContent-Type: text/plain\r\n">}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='create',application='Snapvault',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Completed 422 Unprocessable Content in 14ms (Views: 0.5ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:25:08 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.2ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 3 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.3ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.0ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 13ms (Views: 0.2ms | ActiveRecord: 0.9ms (5 queries, 1 cached) | GC: 0.0ms)
+
+
+Started POST "/upload" for ::1 at 2025-06-19 11:27:11 +0100
+Processing by UploadsController#create as */*
+  Parameters: {"file"=>#<ActionDispatch::Http::UploadedFile:0x0000000125dee380 @tempfile=#<Tempfile:/var/folders/_n/4bpq80q94jj0t8ykyyh21gr00000gn/T/RackMultipart20250619-20890-ys0xeu.csv>, @content_type="text/csv", @original_filename="clean_test.csv", @headers="Content-Disposition: form-data; name=\"file\"; filename=\"clean_test.csv\"\r\nContent-Type: text/csv\r\n">}
+  [1m[36mUser Load (1.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='create',application='Snapvault',controller='uploads'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+Completed 422 Unprocessable Content in 14ms (Views: 0.2ms | ActiveRecord: 1.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/files" for ::1 at 2025-06-19 11:27:11 +0100
+Processing by FilesController#index as */*
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 3 LIMIT 1 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/services/authorize_api_request.rb:20:in `user'
+  [1m[36mUserFile Load (0.2ms)[0m  [1m[34mSELECT "user_files".* FROM "user_files" WHERE "user_files"."user_id" = 3 ORDER BY "user_files"."uploaded_at" DESC /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:10:in `map'
+  [1m[36mUserFile Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "user_files" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:27:in `index'
+  [1m[36mUserFile Sum (0.6ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3 /*action='index',application='Snapvault',controller='files'*/[0m
+  ↳ app/controllers/files_controller.rb:28:in `index'
+  [1m[36mCACHE UserFile Sum (0.1ms)[0m  [1m[34mSELECT SUM("user_files"."file_size") FROM "user_files" LEFT OUTER JOIN "active_storage_attachments" ON "active_storage_attachments"."record_type" = 'UserFile' AND "active_storage_attachments"."name" = 'file' AND "active_storage_attachments"."record_id" = "user_files"."id" LEFT OUTER JOIN "active_storage_blobs" ON "active_storage_blobs"."id" = "active_storage_attachments"."blob_id" WHERE "user_files"."user_id" = 3[0m
+  ↳ app/controllers/files_controller.rb:29:in `index'
+Completed 200 OK in 23ms (Views: 0.2ms | ActiveRecord: 1.5ms (5 queries, 1 cached) | GC: 0.0ms)
+
+

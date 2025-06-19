@@ -74,22 +74,26 @@ SnapVault is a lightweight, secure file upload and access API designed as your p
 
 ### Installation
 
-#### Option 1: Docker Setup (Recommended - Easiest)
+#### Option 1: Native Rails + Docker ClamAV (Recommended)
 
-1. **Start with Docker Compose**:
+1. **Start ClamAV in Docker**:
 ```bash
 cd snapvault
-docker-compose up -d
+docker-compose up -d clamav
 ```
 
-This automatically sets up:
-- Your Rails application
-- ClamAV virus scanner
-- All necessary dependencies
+2. **Run Rails natively**:
+```bash
+bundle install
+bin/rails db:create db:migrate
+bin/rails server
+```
 
-2. **Access the application**:
-   - Visit `http://localhost:3000`
-   - ClamAV will be running on port 3310
+This setup provides:
+- Fast native Rails development
+- Isolated ClamAV in Docker (easy to delete)
+- No system pollution from virus scanner
+- ClamAV accessible at `localhost:3310`
 
 #### Option 2: Native ClamAV Installation
 
@@ -144,15 +148,18 @@ SKIP_VIRUS_SCAN=true bin/rails server
 
 The application will be available at `http://localhost:3000`
 
-### Quick Start with Docker
+### Quick Start Options
 
 ```bash
-# Method 1: Full setup with virus scanning
-docker-compose up -d
+# Method 1: Native Rails + Docker ClamAV (Recommended)
+docker-compose up -d clamav  # Start ClamAV only
+bin/rails server             # Start Rails natively
 
-# Method 2: Basic Docker build
-docker build -t snapvault .
-docker run -p 3000:3000 snapvault
+# Method 2: Development without virus scanning
+SKIP_VIRUS_SCAN=true bin/rails server
+
+# Method 3: Complete Docker setup (if needed)
+docker-compose up -d  # Would start both if app service existed
 ```
 
 ## 🏃‍♂️ Usage
@@ -222,9 +229,11 @@ bin/brakeman
 
 #### Environment Variables
 ```bash
-# Optional: Custom ClamAV connection
-export CLAMAV_HOST=localhost
-export CLAMAV_PORT=3310
+# ClamAV connection (Docker setup)
+export CLAMAV_HOST=localhost      # Docker exposes to localhost
+export CLAMAV_PORT=3310          # Default ClamAV port
+
+# Alternative: Native ClamAV socket
 export CLAMAV_SOCKET_PATH=/var/run/clamav/clamd.ctl
 
 # Development: Skip virus scanning for faster development
@@ -239,10 +248,19 @@ export VIRUS_SCAN_FAIL_OPEN=true
 
 #### Testing Virus Scanner
 ```bash
-# Check if ClamAV is running
+# Start ClamAV in Docker
+docker-compose up -d clamav
+
+# Wait for it to be ready (check logs)
+docker-compose logs -f clamav
+
+# Test from Rails
 bin/rails console
 > FileProcessing::VirusScanner.instance.service_available?
 > FileProcessing::VirusScanner.instance.version_info
+
+# Cleanup when done
+docker-compose down -v
 ```
 
 ### Console Access
@@ -344,18 +362,20 @@ SnapVault is ready for deployment on:
 ### Docker Deployment
 
 ```bash
-# Method 1: Use Docker Compose (includes ClamAV)
-docker-compose -f docker-compose.yml up -d
+# Method 1: ClamAV in Docker, Rails native
+docker-compose up -d clamav
+RAILS_ENV=production bin/rails server
 
-# Method 2: Build and run manually
+# Method 2: ClamAV in Docker, Rails in container (custom setup)
 docker build -t snapvault:latest .
-
-# Run with environment variables (requires external ClamAV)
+docker-compose up -d clamav
 docker run -d -p 3000:3000 \
   -e RAILS_ENV=production \
   -e SECRET_KEY_BASE=your_secret \
   -e DATABASE_URL=your_db_url \
-  -e CLAMAV_HOST=your_clamav_host \
+  -e CLAMAV_HOST=localhost \
+  -e CLAMAV_PORT=3310 \
+  --network host \
   snapvault:latest
 ```
 

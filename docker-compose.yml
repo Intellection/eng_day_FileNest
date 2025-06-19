@@ -1,31 +1,34 @@
-version: '3.8'
+# SnapVault ClamAV Service
+#
+# This runs ONLY ClamAV in Docker - your Rails app runs natively
+#
+# Benefits:
+# - Rails development stays fast and native
+# - ClamAV is isolated and easily deletable
+# - No system pollution from virus scanner
+#
+# Usage:
+#   docker-compose up -d clamav    # Start only ClamAV
+#   bin/rails server               # Start Rails natively
+#   docker-compose down -v         # Complete cleanup
+
+version: "3.8"
 
 services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - RAILS_ENV=development
-      - DATABASE_URL=sqlite3:db/development.sqlite3
-      - CLAMAV_HOST=clamav
-      - CLAMAV_PORT=3310
-    volumes:
-      - .:/app
-      - ./storage:/app/storage
-    depends_on:
-      - clamav
-    networks:
-      - snapvault_network
-
+  # ClamAV Virus Scanner (isolated in Docker)
   clamav:
     image: clamav/clamav:latest
+    container_name: snapvault_clamav
     ports:
-      - "3310:3310"
+      - "3310:3310" # Expose to host so native Rails can connect
     environment:
       - CLAMAV_NO_FRESHCLAM=false
-      - FRESHCLAM_CHECKS=24
+      - FRESHCLAM_CHECKS=24 # Update definitions every 24 hours
       - CLAMD_STARTUP_TIMEOUT=300
+      - CLAMD_CONF_LogFile=/var/log/clamav/clamd.log
+      - CLAMD_CONF_LogVerbose=yes
+      - CLAMD_CONF_TCPSocket=3310
+      - CLAMD_CONF_TCPAddr=0.0.0.0
     volumes:
       - clamav_data:/var/lib/clamav
       - clamav_logs:/var/log/clamav
@@ -33,31 +36,15 @@ services:
       test: ["CMD", "clamdscan", "--ping", "1"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 120s
-    networks:
-      - snapvault_network
+      retries: 5
+      start_period: 180s # ClamAV needs time to download definitions
     restart: unless-stopped
 
-  # Optional: ClamAV Freshclam for automatic virus definition updates
-  freshclam:
-    image: clamav/clamav:latest
-    command: freshclam -d --foreground
-    volumes:
-      - clamav_data:/var/lib/clamav
-      - clamav_logs:/var/log/clamav
-    depends_on:
-      - clamav
-    networks:
-      - snapvault_network
-    restart: unless-stopped
-
+# Volumes for ClamAV data (easy to delete)
 volumes:
   clamav_data:
+    name: snapvault_clamav_data
     driver: local
   clamav_logs:
+    name: snapvault_clamav_logs
     driver: local
-
-networks:
-  snapvault_network:
-    driver: bridge
