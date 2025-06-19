@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SnapVault - Your Personal File Cache</title>
+        <title>FileNest - Your Personal File Cache</title>
         <link
             rel="icon"
             href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗄️</text></svg>"
@@ -196,10 +196,12 @@
             }
 
             .header .logo-icon {
-                font-size: 4rem;
+                width: 80px;
+                height: 80px;
                 margin-bottom: 1rem;
                 display: inline-block;
                 animation: bounce 2s infinite;
+                object-fit: contain;
             }
 
             .header p {
@@ -1201,7 +1203,8 @@
                 }
 
                 .header .logo-icon {
-                    font-size: 3rem;
+                    width: 60px;
+                    height: 60px;
                 }
 
                 .header h1 {
@@ -1226,8 +1229,12 @@
 
         <div class="container">
             <div class="header">
-                <div class="logo-icon">🗄️</div>
-                <h1>SnapVault</h1>
+                <img
+                    src="FileNest_Logo.png"
+                    alt="FileNest Logo"
+                    class="logo-icon"
+                />
+                <h1>FileNest</h1>
                 <p>Your Personal File Cache - Secure, Simple, Fast</p>
             </div>
 
@@ -1538,11 +1545,11 @@
         <div class="alerts-container" id="alertsContainer"></div>
 
         <script>
-            class SnapVault {
+            class FileNest {
                 constructor() {
-                    this.token = localStorage.getItem("snapvault_token");
+                    this.token = localStorage.getItem("filenest_token");
                     this.user = JSON.parse(
-                        localStorage.getItem("snapvault_user") || "null",
+                        localStorage.getItem("filenest_user") || "null",
                     );
                     this.baseUrl = window.location.origin;
                     this.uploadInProgress = false;
@@ -1766,7 +1773,7 @@
                         if (response.token) {
                             this.setAuth(response.token, response.user);
                             this.showAlert(
-                                "Account created successfully! Welcome to SnapVault.",
+                                "Account created successfully! Welcome to FileNest.",
                                 "success",
                             );
                             this.showApp();
@@ -1795,8 +1802,8 @@
                 }
 
                 logout() {
-                    localStorage.removeItem("snapvault_token");
-                    localStorage.removeItem("snapvault_user");
+                    localStorage.removeItem("filenest_token");
+                    localStorage.removeItem("filenest_user");
                     this.token = null;
                     this.user = null;
                     this.showAuth();
@@ -1809,11 +1816,8 @@
                 setAuth(token, user) {
                     this.token = token;
                     this.user = user;
-                    localStorage.setItem("snapvault_token", token);
-                    localStorage.setItem(
-                        "snapvault_user",
-                        JSON.stringify(user),
-                    );
+                    localStorage.setItem("filenest_token", token);
+                    localStorage.setItem("filenest_user", JSON.stringify(user));
                 }
 
                 handleDragOver(e) {
@@ -2058,10 +2062,10 @@
                             </div>
                         </div>
                         <div class="file-actions">
-                            <button class="btn btn-small btn-secondary" onclick="snapVault.downloadFile(${file.id})">
+                            <button class="btn btn-small btn-secondary" onclick="fileNest.downloadFile(${file.id})">
                                 <span class="material-icons">download</span>
                             </button>
-                            <button class="btn btn-small btn-danger" onclick="snapVault.deleteFile(${file.id}, '${this.escapeHtml(file.filename)}')">
+                            <button class="btn btn-small btn-danger" onclick="fileNest.deleteFile(${file.id}, '${this.escapeHtml(file.filename)}')">
                                 <span class="material-icons">delete</span>
                             </button>
                         </div>
@@ -2332,13 +2336,13 @@
 
             // Initialize the app when DOM is loaded
             document.addEventListener("DOMContentLoaded", function () {
-                window.snapVault = new SnapVault();
+                window.fileNest = new FileNest();
             });
 
             // Handle browser back/forward
             window.addEventListener("popstate", function () {
-                if (window.snapVault) {
-                    window.snapVault.checkAuth();
+                if (window.fileNest) {
+                    window.fileNest.checkAuth();
                 }
             });
         </script>
