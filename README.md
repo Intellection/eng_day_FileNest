@@ -201,6 +201,7 @@ curl -X GET http://localhost:3000/files \
 
 ## 🧪 Testing
 
+### Unit Tests
 Run the test suite:
 ```bash
 bin/rails test
@@ -210,6 +211,33 @@ Run with coverage:
 ```bash
 COVERAGE=true bin/rails test
 ```
+
+### Virus Scanning Tests
+Test the ClamAV virus scanning integration:
+
+```bash
+# Quick virus scanning verification
+ruby script/simple_virus_test.rb
+
+# Comprehensive virus scanning test suite
+ruby script/test_virus_scanning.rb
+
+# Test file uploads with all supported types
+ruby script/test_upload.rb
+```
+
+**Test Scripts:**
+- `script/simple_virus_test.rb` - Quick verification that virus scanning works
+- `script/test_virus_scanning.rb` - Comprehensive test suite with clean and infected files
+- `script/test_upload.rb` - End-to-end file upload testing
+- `VIRUS_SCANNING_TEST_RESULTS.md` - Detailed test results and security analysis
+
+**What the virus tests verify:**
+- ✅ ClamAV service availability and version
+- ✅ Clean files pass virus scanning
+- ✅ EICAR test virus is detected and blocked
+- ✅ File upload rejection works for infected files
+- ✅ Rails virus scanner integration is functional
 
 ## 🔧 Development
 
@@ -254,14 +282,26 @@ docker-compose up -d clamav
 # Wait for it to be ready (check logs)
 docker-compose logs -f clamav
 
-# Test from Rails
+# Quick virus scanning test
+ruby script/simple_virus_test.rb
+
+# Comprehensive virus scanning tests
+ruby script/test_virus_scanning.rb
+
+# Test from Rails console
 bin/rails console
 > FileProcessing::VirusScanner.instance.service_available?
 > FileProcessing::VirusScanner.instance.version_info
 
+# Manual virus detection test with EICAR
+echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' | docker exec -i snapvault_clamav clamdscan -
+
 # Cleanup when done
 docker-compose down -v
 ```
+
+**Virus Scanning Test Results:**
+See `VIRUS_SCANNING_TEST_RESULTS.md` for complete test documentation and security verification.
 
 ### Console Access
 ```bash
@@ -287,11 +327,17 @@ snapvault/
 │   │   └── user_file.rb
 │   └── services/           # Business logic
 │       ├── auth/
-│       └── file_processing/
+│       └── file_processing/ # Virus scanning and file processing
 ├── config/                 # Application configuration
 ├── db/                     # Database files
 ├── public/                 # Static files and frontend
-└── storage/               # File storage
+├── script/                 # Testing and utility scripts
+│   ├── simple_virus_test.rb    # Quick virus scanning test
+│   ├── test_virus_scanning.rb  # Comprehensive virus tests
+│   └── test_upload.rb          # File upload testing
+├── test_files/            # Sample files for testing
+├── storage/               # File storage
+└── VIRUS_SCANNING_TEST_RESULTS.md # Test documentation
 ```
 
 ## 🛡️ Security Features
