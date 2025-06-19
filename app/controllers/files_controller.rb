@@ -1,7 +1,7 @@
 class FilesController < ApplicationController
   include Authenticable
 
-  before_action :set_user_file, only: [ :show, :download, :destroy ]
+  before_action :set_user_file, only: [ :show, :download, :update, :destroy ]
 
   # GET /files
   def index
@@ -62,6 +62,33 @@ class FilesController < ApplicationController
     end
   end
 
+  # PATCH /files/:id
+  def update
+    authorize_file_access!(@user_file)
+
+    if @user_file.update(update_params)
+      render json: {
+        message: "File renamed successfully",
+        file: {
+          id: @user_file.id,
+          filename: @user_file.filename,
+          content_type: @user_file.content_type,
+          file_size: @user_file.file_size,
+          human_readable_size: @user_file.human_readable_size,
+          uploaded_at: @user_file.uploaded_at,
+          is_image: @user_file.image?,
+          is_text: @user_file.text?,
+          file_extension: @user_file.file_extension
+        }
+      }, status: :ok
+    else
+      render json: {
+        message: "Failed to rename file",
+        errors: @user_file.errors.full_messages
+      }, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /files/:id
   def destroy
     authorize_file_access!(@user_file)
@@ -82,6 +109,10 @@ class FilesController < ApplicationController
     @user_file = UserFile.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render json: { message: Message.file_not_found }, status: :not_found
+  end
+
+  def update_params
+    params.require(:file).permit(:filename)
   end
 
   def human_readable_size(size_in_bytes)

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get "files", to: "files#index"
   get "files/:id", to: "files#show"
   get "files/:id/download", to: "files#download"
+  patch "files/:id", to: "files#update"
   delete "files/:id", to: "files#destroy"
 
   # Defines the root path route ("/")
