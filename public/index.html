@@ -1297,14 +1297,53 @@
 
                 async downloadFile(fileId) {
                     try {
-                        // Open download in new tab
-                        const downloadUrl = `${this.baseUrl}/files/${fileId}/download`;
+                        const response = await fetch(
+                            `${this.baseUrl}/files/${fileId}/download`,
+                            {
+                                method: "GET",
+                                headers: {
+                                    Authorization: `Bearer ${this.token}`,
+                                },
+                            },
+                        );
+
+                        if (!response.ok) {
+                            let errorMsg = "Download failed";
+                            try {
+                                const error = await response.json();
+                                errorMsg = error.message || errorMsg;
+                            } catch (e) {}
+                            this.showAlert(errorMsg, "error");
+                            return;
+                        }
+
+                        // Try to extract filename from Content-Disposition header
+                        let filename = "";
+                        const disposition = response.headers.get(
+                            "Content-Disposition",
+                        );
+                        if (disposition && disposition.includes("filename=")) {
+                            filename = disposition
+                                .split("filename=")[1]
+                                .split(";")[0]
+                                .replace(/['"]/g, "")
+                                .trim();
+                        }
+
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
                         const link = document.createElement("a");
-                        link.href = downloadUrl;
-                        link.style.display = "none";
+                        link.href = url;
+                        link.download = filename || "";
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+
+                        this.showAlert(
+                            "File downloaded successfully",
+                            "success",
+                        );
                     } catch (error) {
                         this.showAlert("Failed to download file", "error");
                     }
