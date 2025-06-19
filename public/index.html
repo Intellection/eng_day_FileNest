@@ -565,7 +565,7 @@
 
             .app-section.active {
                 display: block;
-                animation: fadeIn var(--transition-standard) ease-out;
+                animation: fadeInSpin var(--transition-standard) ease-out;
             }
 
             @keyframes fadeIn {
@@ -574,6 +574,28 @@
                 }
                 to {
                     opacity: 1;
+                }
+            }
+
+            @keyframes fadeInSpin {
+                from {
+                    opacity: 0;
+                    transform: rotate(-180deg) scale(0.8);
+                }
+                to {
+                    opacity: 1;
+                    transform: rotate(0deg) scale(1);
+                }
+            }
+
+            @keyframes fadeInSpinChild {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px) rotate(-90deg) scale(0.9);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) rotate(0deg) scale(1);
                 }
             }
 
@@ -590,6 +612,8 @@
                 align-items: center;
                 position: relative;
                 overflow: hidden;
+                opacity: 0;
+                transform: translateY(30px) rotate(-90deg) scale(0.9);
             }
 
             .user-info::before {
@@ -635,6 +659,8 @@
             .upload-section {
                 padding: 2rem;
                 background: var(--surface-color);
+                opacity: 0;
+                transform: translateY(30px) rotate(-90deg) scale(0.9);
             }
 
             .upload-section h2 {
@@ -736,6 +762,8 @@
                 background: var(--gray-50);
                 padding: 2rem;
                 border-top: 1px solid var(--gray-200);
+                opacity: 0;
+                transform: translateY(30px) rotate(-90deg) scale(0.9);
             }
 
             .stats-grid {
@@ -802,6 +830,8 @@
             .files-section {
                 padding: 2rem;
                 background: var(--surface-color);
+                opacity: 0;
+                transform: translateY(30px) rotate(-90deg) scale(0.9);
             }
 
             .files-section h2 {
@@ -1882,6 +1912,21 @@
                     document
                         .getElementById("uploadFab")
                         .classList.add("hidden");
+
+                    // Reset child element animations
+                    const childElements = [
+                        document.querySelector(".user-info"),
+                        document.querySelector(".upload-section"),
+                        document.querySelector(".stats"),
+                        document.querySelector(".files-section"),
+                    ].filter((el) => el);
+
+                    childElements.forEach((element) => {
+                        element.style.animation = "";
+                        element.style.opacity = "0";
+                        element.style.transform =
+                            "translateY(30px) rotate(-90deg) scale(0.9)";
+                    });
                 }
 
                 showApp() {
@@ -1897,6 +1942,18 @@
                     document
                         .getElementById("uploadFab")
                         .classList.remove("hidden");
+
+                    // Add staggered spin animations to child elements
+                    const childElements = [
+                        document.querySelector(".user-info"),
+                        document.querySelector(".upload-section"),
+                        document.querySelector(".stats"),
+                        document.querySelector(".files-section"),
+                    ].filter((el) => el); // Filter out null elements
+
+                    childElements.forEach((element, index) => {
+                        element.style.animation = `fadeInSpinChild 0.6s ease-out ${index * 0.1}s both`;
+                    });
                 }
 
                 async handleLogin(e) {
@@ -2791,7 +2848,8 @@
 
                     if (loading) {
                         button.disabled = true;
-                        btnText.textContent = "Loading...";
+                        btnText.innerHTML =
+                            '<span class="spinner" style="width: 16px; height: 16px; margin-right: 8px;"></span>Loading...';
                     } else {
                         button.disabled = false;
                         if (buttonId === "loginBtn") {
